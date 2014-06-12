@@ -1,0 +1,25 @@
+       		<form name="list_form" action="" method="POST">
+       		<table class="bordered-table zebra-striped">
+				<thead>
+					<tr id="table_headers">
+		       			<th><input id="check_all" class="nomargin" type="checkbox" name="check_all" value="" /></th>
+		       			<th id="order_name" class="order_cell header"><?php echo $this->i18n->t('form.name'); ?></th>
+		       			<th id="order_state" class="order_cell header"><?php echo $this->i18n->t('form.state'); ?></th>
+		       			<th id="order_url" class="order_cell header"><?php echo $this->i18n->t('form.url'); ?></th>
+		       			<th id="order_image" class="order_cell header"><?php echo $this->i18n->t('form.image'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+       				<?php foreach ($this->ads as $ad): ?>
+	          		<tr>
+	          			<td><input class="nomargin check_list" type="checkbox" name="check_list[<?php echo $ad['id']; ?>]" value="" /></td>
+	          			<td><a href="<?php echo $this->url(array('content_action' => 'edit','content_type' => 'ad','params' => http_build_query(array('id' => $ad['id']))),'admin_content',true,false); ?>"><?php echo $ad['name']; ?></a></td>
+	          			<td><?php echo ($ad['state'] > 0) ? $this->i18n->t('form.state_active') : $this->i18n->t('form.state_not_active'); ?></td>
+	          			<td><a target="_blank" href="<?php echo $ad['url']; ?>"><?php echo $ad['url']; ?></a></td>
+	          			<td><img src="/uploads/ad/<?php echo $ad['image']; ?>" /></td>     				
+	          		</tr>
+          			<?php endforeach; ?>
+          		</tbody>
+          	</table>
+       		</form>
+       		<?php echo $this->paginationControl($this->ads, 'Sliding', 'pagination-ajax.phtml',array('i18n' => $this->i18n,'callback' => 'load_list_table')); ?>

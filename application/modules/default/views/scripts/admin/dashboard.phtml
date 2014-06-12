@@ -1,0 +1,22 @@
+    	<?php $identity = Zend_Auth::getInstance()->getIdentity(); ?>
+		<?php if (trim($this->placeholder('messages')) != ''): ?>
+    	<div id="flashMsgs">
+        	<?php echo $this->placeholder('messages'); ?>
+    	</div>
+    	<?php endif; ?>
+        <div class="row">
+          <div class="span10">
+            <h3><?php echo $this->i18n->t('dashboard.hello').' '.$identity->name.','; ?></h3>
+            <h3><?php echo $this->i18n->t('dashboard.welcome_to').' '.$this->i18n->t('application.name').' '.$this->i18n->t('title.admin_index'); ?></h3>
+            <p><?php echo $this->i18n->t('dashboard.description'); ?></p>
+          </div>
+          <div id="dashboard_buttons" class="span10">
+        	<?php $dashboard_content_types = array('story','producer'); ?>
+            <?php foreach ($dashboard_content_types as $content_type): ?>
+            <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$content_type.'_edit')): ?>
+            <a class="btn primary large" href="<?php echo $this->url(array('content_type' => $content_type,'content_action' => 'edit'),'admin_content',true,false); ?>"><font size="6"><?php echo $this->i18n->t('link.add_new'); ?></font><br /><?php echo $this->i18n->t('content.type_'.$content_type); ?></a>
+            <?php endif; ?>
+            <?php endforeach; ?>
+            <div class="clear"></div>
+          </div>
+        </div>

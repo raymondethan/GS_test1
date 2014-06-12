@@ -1,0 +1,11 @@
+<?php if (count($this->messages) > 0): ?>
+<?php foreach ($this->messages as $type => $messages): ?>
+<div class="<?php echo $type ?>Msgs">
+	<ul>
+	<?php foreach ($messages as $msg): ?>
+		<li><?php echo $msg; ?></li>
+	<?php endforeach; ?>	
+	</ul>	
+</div>	
+<?php endforeach;  ?>
+<?php endif; ?>

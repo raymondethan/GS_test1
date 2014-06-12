@@ -1,0 +1,69 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        var content_form = $("form[name=<?php echo $this->form['type']; ?>]");
+
+        content_form.bind('keypress',function(e){
+        	var code = (e.keyCode ? e.keyCode : e.which);
+        	
+        	if (code == '13') {
+        		content_form.find('.submit_button').trigger('click');
+        		return false;
+            }
+       	}); 
+
+        var submit_button_hander = function(){
+            $(this).unbind('click');
+
+            var form_response = content_form.find('.form_validate_error');
+            var form_data = content_form.serialize();
+            var form_validate_url = '<?php echo $this->url(array('content_action' => 'validate','content_type' => $this->form['type']),'admin_content',true,false); ?>';
+            
+            form_response.html('<div class="loading_small"></div>');
+
+            $.ajax({
+                url: form_validate_url,
+                data: form_data,
+                success: function(data) {
+                    if (data == 1) {
+                        <?php if (!is_null($this->fancybox)): ?>
+                        $.ajax({
+                            url: content_form.attr('action'),
+                            type: 'POST',
+                            data: form_data,
+                            success: function(new_item) {
+                                var generate_list_url = '<?php echo $this->url(array('action' => 'generate-list','controller' => 'ajax'),'action',true,false); ?>';
+                                var generate_list_type = '<?php echo $this->form['type']; ?>';
+                                var generate_list_params = story_list_params[generate_list_type];
+                                
+                                if (typeof story_list_params[generate_list_type]['selected'] == 'string') {
+                                    story_list_params[generate_list_type]['selected'] = new_item;
+                                    if (generate_list_type == 'location') {
+                                        $("input[name=geolocation]").val('');
+                                        gmap_markers = [];
+                                    }
+                                }
+                                else {
+                                    story_list_params[generate_list_type]['selected'].push(new_item);
+                                }
+                                
+                                $("#fancybox-close").trigger('click');
+                                generate_list(generate_list_url,generate_list_type,generate_list_params);
+                            }
+                        });
+                        <?php else: ?>
+                        content_form.submit();
+                        <?php endif; ?>   
+                    }
+                    else {
+                        form_response.html(data);
+                    }
+                }
+            });
+            $(this).bind('click',submit_button_hander);
+        };
+        
+        content_form.find('.submit_button').bind('click',submit_button_hander);
+        
+    });
+</script>

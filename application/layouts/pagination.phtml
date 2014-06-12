@@ -1,0 +1,20 @@
+<?php if ($this->pageCount > 1): ?>
+<div class="pagination">
+    <?php if (!is_null($this->previous)): 
+            $params = $this->params; 
+            $params['page'] = $this->previous; ?>
+    <a href="<?php echo $this->url(array_merge($this->route_params,array('params' => http_build_query($params))), $this->route, true, false); ?>"><?php echo $this->i18n->t('pagination.prev'); ?></a>
+    <?php endif; ?>
+    <?php $params = $this->params; ?>
+    <?php foreach ($this->pagesInRange as $page): 
+            $params['page'] = $page; ?>
+    <a <?php echo ($this->current == $page) ? 'class="current"' : ''; ?> href="<?php echo $this->url(array_merge($this->route_params,array('params' => http_build_query($params))), $this->route, true, false); ?>"><?php echo $page; ?></a>
+    <?php endforeach; ?>
+    <?php if (!is_null($this->next)): 
+            $params = $this->params; 
+            $params['page'] = $this->next; ?>
+    <a href="<?php echo $this->url(array_merge($this->route_params,array('params' => http_build_query($params))), $this->route, true, false); ?>"><?php echo $this->i18n->t('pagination.next'); ?></a>
+    <?php endif; ?>
+    <div class="clear"></div>
+</div>
+<?php endif; ?>

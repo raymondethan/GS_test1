@@ -1,0 +1,29 @@
+						<div class="items">	
+							<ul>
+								<?php foreach ($this->items as $story): ?>
+								<li id="item_<?php echo $story['id'] ?>">
+									<a class="category-<?php echo strtolower($this->categories[$story['category']]['short_name']); ?> type-<?php echo strtolower($this->medias[$story['media']]['short_name']); ?>" title="<?php echo $story['name']; ?>" href="<?php echo $this->url(array('story_id' => $story['id'],'url_title' => $story['url_title']),'story',true,false); ?>">
+										<figure>
+											<?php 
+												$thumbnail_size = explode("x",$this->i18n->t('image.story_thumbnail_size'));
+												$thumbnail = ($story['thumbnail'] != '' && file_exists(ROOT_PATH.'/public/uploads/story/'.$story['thumbnail'])) ? '/uploads/story/'.$story['thumbnail'] : '/images/no_thumbnail.gif';
+											?>
+											<img width="<?php echo $thumbnail_size[0]; ?>" alt="<?php echo $story['name']; ?>" src="<?php echo $thumbnail; ?>" />
+											<figcaption><?php echo $this->medias[$story['media']]['short_name']; ?><strong></strong><span></span></figcaption>
+										</figure>
+										<h3>
+											<?php 
+												$limit = $this->i18n->t('application.top_recent_stories_title_chars_limit');
+												if (strlen($story['name']) > $limit) {
+													echo substr($story['name'],0,strrpos(substr($story['name'],0,$limit),' ')).' ...';
+												}
+												else {
+													echo $story['name'];
+												}
+											?>
+										</h3>
+									</a>
+								</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>	

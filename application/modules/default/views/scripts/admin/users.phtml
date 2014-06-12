@@ -1,0 +1,29 @@
+	<div id="content_page" class="user_page page_wrapper">        
+        <div class="row">
+          	<div class="span20">
+          		<?php foreach ($this->user_types as $user_type): ?>
+          		<?php if (is_array($this->user_admins[$user_type['id']])): ?>
+          		<h2><?php echo $this->i18n->t('user_type.'.$user_type['name']); ?></h2>
+          		<div class="add_item"><a class="btn primary large" href="<?php echo $this->url(array('action' => 'edit-user','user_type' => $user_type['id']),'admin',true,false); ?>"><?php echo $this->i18n->t('user.add'); ?></a></div>
+	    			<div class="clear"></div>
+          		<table class="bordered-table zebra-striped">
+          			<thead>
+          				<tr>
+          					<th><?php echo $this->i18n->t('user.username'); ?></th>
+          					<th><?php echo $this->i18n->t('form.name'); ?></th>
+          				</tr>
+          			</thead>
+          			<tbody>
+	          			<?php foreach ($this->user_admins[$user_type['id']] as $user_admin): ?>
+	          			<tr>
+	          				<td><?php echo $user_admin['username']; ?></td>
+	          				<td><?php echo $user_admin['name']; ?></td>       				
+	          			</tr>
+	          			<?php endforeach; ?>
+          			</tbody>
+          		</table>
+          		<?php endif; ?>	
+          		<?php endforeach; ?>
+          	</div>
+        </div>  
+	</div>        

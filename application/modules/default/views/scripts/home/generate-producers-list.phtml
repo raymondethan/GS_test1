@@ -1,0 +1,14 @@
+														<?php @$producers = (trim($this->params['producers']) != '') ? explode(",",$this->params['producers']) : array(); ?>
+														<ul>
+															<li>
+																<input id="producers-all" name="producers" type="checkbox" value="" class="story-all"<?php echo (count($producers) == 0) ? ' checked="checked"' : ''; ?> />
+																<label for="producers-all">all (<span class="now_showing_number_of_stories"><?php echo $this->counter['producers_stories']; ?></span>)</label>
+															</li>
+															<?php foreach ($this->producers as $producer): ?>
+															<li>
+																<input id="producers-<?php echo $producer['id']; ?>" name="producers" type="checkbox" value="<?php echo $producer['id']; ?>"<?php echo (in_array($producer['id'],$producers)) ? ' checked="checked"' : ''; ?> />
+																<label for="producers-<?php echo $producer['id']; ?>"><?php echo $producer['name'].(($producer['stories_count'] > 0) ? ' ('.$producer['stories_count'].')' : ''); ?></label>
+															</li>
+															<?php endforeach; ?>
+														</ul>
+<?php if (@$this->params['ajax'] !== false) {die();}?>

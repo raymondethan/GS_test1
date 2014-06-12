@@ -1,0 +1,355 @@
+<?php
+	$cache_expire = 0;
+	header("Content-type: text/html; charset=UTF-8");  
+ 	header("Pragma: no-cache");
+ 	header("Cache-Control: no-cache, no-store, must-revalidate");
+ 	header("Expires: 0");
+?>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+<script type="text/javascript"> 
+		var addthis_config = {
+		     data_track_clickback: false 
+		} 
+		</script> 		
+		<?php echo $this->render('blocks/head.phtml'); ?>
+		<script type="text/javascript">
+		
+			if (!swfobject.hasFlashPlayerVersion('10.0.0')) {
+				/*window.location = '<?php echo $this->url(array('action' => 'no-flash'),'action',true,false); ?>';*/
+			}
+		
+		</script>
+	</head>
+	<body class="map-view">
+		<?php echo $this->render('blocks/facebook.phtml'); ?>
+		<div id="page">
+			<?php echo $this->render('blocks/header.phtml'); ?>
+			<hr />
+			<div id="content">
+
+				<div id="pages">
+					<div id="map-page">
+
+						<div id="stories-filter">
+
+							<div id="toolbar">
+
+								<ul class="tabs">
+									<li>
+										<a href="#toolbar-facebook" class="facebook">Facebook</a>
+									</li>
+									<li>
+										<a href="#toolbar-filters" class="filters">Filter stories</a>
+										<?php if ($this->first_time_user): ?>
+										<div class="tooltip tooltip-right">You can filter the stories here<span></span></div>
+										<?php endif; ?>
+									</li>
+									<li>
+										<a href="#toolbar-stats" class="stats">Stats</a>
+									</li>
+								</ul>
+
+								<div id="toolbar-facebook">
+
+									<div class="facebook-signedin">
+
+										<div id="user-info" class="vcard">
+											<div class="avatar">
+												<img class="user_avatar" width="70" src="" alt="" />
+												<span></span>
+											</div>
+											<h2 class="user_full_name"></h2>
+											<!--
+											<dl>
+												<dt>Recommends</dt>
+												<dd><a id="user_recommends_<?php echo $user['id'] ?>" class="user_recommends" href="#"><span class="user_shared_number_of_stories"></span> stories</a></dd>
+                                                                                                <dt>Viewed</dt>
+																					
+                                                                                                <?php echo $user['id'] ?>!!!!
+                                                                                                <dd><a  class="user_views" href="#"><span class="user_viewed_number_of_stories"></span> stories</a></dd>
+											</dl>
+											-->
+											
+											   
+											<div class="stories-watched">
+												<a style="padding: 2px 0;display: block;font-size: 10px;text-transform: uppercase;" class="user_views current_user_views" href="#"></a>
+											</div>
+											<div class="stories-watched">
+												<a style="padding: 2px 0;display: block;font-size: 10px;text-transform: uppercase;" class="user_recommends current_user_recommends" href="#"></a>
+											</div>
+											<a href="#" id="facebook-logout">Logout</a>
+										</div>                                                                                
+                                                                            
+                                                                             
+                                                                                 
+                                                                                 <fieldset id="filter-friends-community">
+	
+												<ul class="tabs">
+													<li><a class="friends" href="#filter-friends">Friend Maps</a></li>
+													<li><a class="community" href="#filter-community">Community Feed</a></li>
+												</ul>
+	
+												<div id="filter-friends">
+													<div class="wrapper">
+                                                                                                        </div>
+												</div>
+												<!-- /filter-tags -->
+	
+												<div id="filter-community">
+													<div class="wrapper">
+                                                                                                        </div>
+												</div>
+												<!-- / filter-producers -->
+											</fieldset>
+										<div class="promote">
+                                                                                    
+											<a href="#">Promote the map!</a>
+										</div>
+										
+									</div>
+
+									<div class="facebook-signedout">
+										<div class="section-inner" style="text-align:center;">
+											<div class="section">
+												<p>Connect with Facebook to build your own map about social change.<br /> </p>	
+												<p style="padding-top:10px;">Share the Global Stories you're passionate about.<br /> </p>	
+												<p class="note">Click below to get started.</p>
+												<span class="fig"></span>
+											</div>
+
+											<div class="section" id="fb-root">
+												<a href="#" id="facebook-login" class="facebook-login">Connect with Facebook</a>
+											</div>
+											
+											<div class="section">
+												<p>Each dot is a story.<br /> </p>	
+													<span class="fig"></span>
+											</div>
+											
+											<div class="section">
+												<p>Watch the story by clicking the story.<br /> </p>	
+													<span class="fig"></span>
+											</div>
+											
+												<div class="section">
+												<p>Add a story to your map by clicking on this button.<br /> </p>	
+													<span class="fig"></span>
+											</div>
+											<!--
+											<div class="section">
+												<p>Each dot is a story.<br /> </p>	
+												<p style="padding-top:10px;">Watch the story by clicking the story.<br /> </p>	
+												<p style="padding-top:10px;">Add a story to your map by clicking on this button.<br /> </p>	
+												<span class="fig"></span>
+											</div>
+											-->
+											
+											<div class="section" >
+												<a id="sidebar_add_map" href="#" style="">&nbsp;</a>
+												<span class="fig"></span>
+											</div>
+											
+											<div class="section">
+												<p>Share stories and maps with your friends<br /> </p>	
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<!-- /toolbar-facebook -->
+							
+								<div id="toolbar-filters">
+									<form action="#" method="get">
+	
+										<div class="content">
+											<fieldset id="filter-tags-producers">
+	
+												<ul class="tabs">
+													<li><a class="tags" href="#filter-tags">Tags</a></li>
+													<li><a class="producers" href="#filter-producers">Producers</a></li>
+												</ul>
+	
+												<div id="filter-tags">
+													<div class="wrapper">
+														<?php echo $this->action('generate-tags-list','home','default',array_merge(array('ajax' => false,'partial' => true),$this->url_params)); ?>
+													</div>
+												</div>
+												<!-- /filter-tags -->
+	
+												<div id="filter-producers">
+													<div class="wrapper">
+														<?php echo $this->action('generate-producers-list','home','default',array_merge(array('ajax' => false,'partial' => true),$this->url_params)); ?>
+													</div>
+												</div>
+												<!-- / filter-producers -->
+											
+											</fieldset>
+											<!-- / filter-tags-producers -->
+										</div>
+										<!-- / content -->
+							
+										<div class="footer">
+											<fieldset id="filter-corp">
+												<h2>Story corp</h2>
+												<ul>
+													<?php @$organisation_types_instead_of = explode(",",$this->params['otio']); ?>
+													<?php foreach ($this->organisation_types as $organisation_type): ?>
+													<li>
+														<label><?php echo $organisation_type['short_name']; ?></label>
+														<input title="<?php echo $organisation_type['name']; ?>" name="organisation_types" type="checkbox" value="<?php echo $organisation_type['id']; ?>"<?php echo (!in_array($organisation_type['id'],$organisation_types_instead_of)) ? ' checked="checked"' : ''; ?> />
+													</li>
+													<?php endforeach; ?>
+												</ul>
+											</fieldset>
+											<!-- /filter-corp -->
+											
+											<fieldset id="filter-properties">
+												<h2>Story properties</h2>
+												
+												<fieldset id="filter-format">
+													<h3>Story format</h3>
+													<ul>
+														<?php 
+															@$medias_instead_of = explode(",",$this->params['mio']); 
+															$show_duration = false;
+														?>
+														<?php foreach ($this->medias as $k => $v): 
+																( (strtolower($v['short_name']) == 'video' && !in_array($k,$medias_instead_of)) || (strtolower($v['short_name']) == 'audio' && !in_array($k,$medias_instead_of))) ? $show_duration = true : ''; ?>
+														<li class="format-<?php echo strtolower($v['short_name']); ?>">
+															<label><?php echo $v['short_name']; ?></label>
+															<input name="story-format" type="checkbox" value="<?php echo $k; ?>"<?php echo (!in_array($k,$medias_instead_of)) ? ' checked="checked"' : ''; ?> />
+														</li>
+														<?php endforeach; ?>
+													</ul>
+												</fieldset>
+												<!-- /filter-format -->
+												
+												<fieldset id="filter-duration"<?php echo (!$show_duration) ? ' style="display:none"' : ''; ?>>
+													<h3>Duration <br />(min)</h3>
+													<ul>
+														<?php $durations = array('0-3' => '0,3','3-10' => '3,10','10+' => '10,0','All' => '');?>
+														<?php $i = 0; ?>
+														<?php foreach ($durations as $k => $v): $i++; ?>
+														<li>
+															<label><?php echo $k; ?></label>
+															<input name="duration" type="radio" value="<?php echo $v; ?>" title="<?php echo $k; ?>"<?php echo (@$this->params['duration'] == $v || ($i == count($durations) && !isset($this->params['duration']))) ? ' checked="checked"' : ''; ?> />
+														</li>
+														<?php endforeach; ?>
+													</ul>
+												</fieldset>
+												<!-- /flilter-duration -->
+											</fieldset>
+											<!-- / story properties -->
+	
+											<fieldset id="filter-adult">
+												<h3>Adult content</h3>
+												<ul>
+													<li>
+														<label>On</label>
+														<input name="adult" type="radio" value=""<?php echo (!isset($this->params['adult_content'])) ? ' checked="checked"' : ''; ?> />
+													</li>
+													<li>
+														<label>Off</label>
+														<input name="adult" type="radio" value="0"<?php echo (isset($this->params['adult_content']) && (int)$this->params['adult_content'] == 0) ? ' checked="checked"' : ''; ?> />
+													</li>
+												</ul>
+											</fieldset>
+											<!-- /filter-adult -->
+	
+											<!-- Filter dates -->
+											<fieldset class="section" id="filter-dates" data-min="<?php echo $this->i18n->t('application.filter_dates_min_year'); ?>" data-max="<?php echo date("Y",time()); ?>">
+												<h3>Dates</h3>
+												<label>From</label>
+												<input type="text" name="date-from" value="<?php echo (isset($this->params['dates'])) ? current(explode(",",$this->params['dates'])) : $this->i18n->t('application.filter_dates_min_year'); ?>" class="date-year-from" />
+												<div class="now">
+													<span>Now</span>
+												</div>
+											</fieldset>
+											<!-- / filter-dates -->
+	
+											<fieldset id="filter-search">
+												<label>Search</label>
+												<input name="search" placeholder="SEARCH STORIES" type="text" />
+											</fieldset>
+											<!-- / filter-search -->
+	
+										</div>
+										<!-- / footer -->
+	
+									</form>
+								<!-- /filters -->
+								</div>
+
+								<div id="toolbar-stats" style="display:none;">
+									
+									<form action="#" method="post" id="stats-chooser">
+										<fieldset class="stats-category">
+											<label>Select statistics</label>
+										</fieldset>
+										<fieldset class="stats-subcategory">
+											<label>Select statistics</label>
+										</fieldset>
+									</form>
+									<!-- /stats-chooser -->
+
+									<div id="stats-info"><img src="/images/stats_info.jpg" /></div>
+									<!-- /stats-info -->
+								
+								</div>
+								<!-- /toolbar-stats -->
+
+							</div>
+							<!-- /story-toolbar -->
+							
+							<div id="map">
+								<div id="map-wrapper">
+											<div id="message-noflash" style="margin-top:130px;">
+												<div class="section">
+													<h1><a href="#">GlobalStories</a></h1>
+													<p>Global Stories requires Adobe Flash Player 10.</p>
+													<a target="_blank" href="http://get.adobe.com/flashplayer/" rel="external" class="get-flash">Get the flash player</a>
+												</div>
+										</div>
+								</div>		
+							</div>
+							
+							<div id="filter-info">
+								<table cellpadding="0" cellspacing="0">
+									<tr>
+										<td>Now showing <span class="now_showing_number_of_stories"><?php echo $this->counter['now_showing_stories']; ?></span> of <span><?php echo $this->counter['total_stories']; ?></span> stories in <span class="counter_type"><?php echo $this->counter['type']; ?></span> view</td>
+										<td><div class="loading_small"></div></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						
+						<?php echo $this->render('blocks/bottom_stories.phtml'); ?>
+					</div>
+					<div id="story-pages"></div>
+				</div>
+			</div>
+			<?php echo $this->render('blocks/footer.phtml'); ?>
+		</div>
+		<script type="text/javascript">
+			
+			var _gaq = _gaq || [];
+				_gaq.push(['_setAccount', 'UA-28299261-1']);
+			  	_gaq.push(['_setDomainName', '.globalstories.org']);
+			  	_gaq.push(['_trackPageview']);
+			  	
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			  	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			  	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+			  	  
+		</script>
+		<script type="text/javascript" src="/js/main.js"></script>
+		<script type="text/javascript" src="/js/website.js"></script>
+	</body>
+</html>

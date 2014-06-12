@@ -1,0 +1,49 @@
+<?php $uploads_folder = '/uploads/import'; ?>
+<div id="import_page" class="page_wrapper">
+    <div class="content_inner">
+        <h2><?php echo $this->i18n->t('content.statistics_importer'); ?></h2>
+        <div class="import_file">
+            <input id="import" type="file" value="" />
+            <a class="submit_button"><?php echo $this->i18n->t('link.import'); ?></a>
+        </div>
+        <div class="import_result"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+   
+        $("#import").uploadify({
+            'uploader'  : '/uploadify/uploadify.swf',
+            'expressInstall' : '/uploadify/expressInstall.swf',
+            'script'    : '/uploadify/uploadify.php',
+            'cancelImg' : '/uploadify/cancel.png',
+            'buttonText': '<?php echo $this->i18n->t('uploadify.select_xls'); ?>',
+            'folder'    : '/public<?php echo $uploads_folder; ?>',
+            'fileExt'   : '*.csv',
+            'fileDesc'  : '*.csv',
+            'sizeLimit' : '134217728',
+            'multi'     : false,
+            'auto'      : false,
+            'onError'   : function(event,ID,fileObj,errorObj){
+                $(".import_result").html(errorObj['info']);
+            },
+            'onComplete': function(event, ID, fileObj, response, data) {
+                $(".import_result").html('<div class="loading_small"></div><div class="loading_text"><?php echo $this->i18n->t('import.loading_text'); ?></div><div class="clear"></div>');
+                
+                $.ajax({
+                    url: '<?php echo $this->url(array('action' => 'import'),'admin',true,false); ?>',
+                    data: {file: response},
+                    success: function(data) {
+                        $(".import_result").html(data);
+                    }
+                });
+            }
+        });  
+        
+        $(".submit_button").bind('click',function(){
+            $("#import").uploadifyUpload();
+        });
+   
+    });
+</script>

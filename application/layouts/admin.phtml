@@ -1,0 +1,78 @@
+<?php 
+	header("Content-type: text/html; charset=UTF-8");
+	$identity = Zend_Auth::getInstance()->getIdentity();
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php echo $this->page_title.' - '.$this->i18n->t('application.name'); ?></title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(); ?>
+    
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png" />
+    
+    <?php echo $this->headScript(); ?>
+    <script type="text/javascript">
+    		$(document).ready(function(){
+			$("#back_to_website").bind('click',function(){
+				window.location.href = '<?php echo $this->url(array(),'default',true,false); ?>';
+			});
+			
+			$("#logout").bind('click',function(){
+				window.location.href = '<?php echo $this->url(array('action' => 'logout','controller' => 'user'),'action',true,false); ?>';
+			});
+        	});
+    </script>
+  </head>
+
+  <body>
+
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="<?php echo $this->url(array(),'admin',true,false); ?>"><?php echo $this->i18n->t('application.name'); ?></a>
+          	<?php if (!is_null($identity)): ?>
+			<?php echo $this->action('menu','home','default',array('type' => 'admin','set_active' => $this->menu_set_active,'partial' => true)); ?>
+		  	<?php endif; ?>	
+			<p class="pull-right">
+				<button id="back_to_website" class="btn"><?php echo $this->i18n->t('admin.back_to_website'); ?></button>
+				<?php if (!is_null($identity)): ?>
+				<button id="logout" class="btn"><?php echo $this->i18n->t('user.logout').' ('.ucfirst($identity->name).')'; ?></button>
+				<?php endif; ?>
+			</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+    
+	  <div class="content">
+	  	<?php if (!is_null($identity)): ?>
+	  	  <div class="page-header">
+	  	  	<h1><?php echo $this->placeholder('breadcrumbs').$this->page_title; ?></h1>
+	  	  </div>
+	  	<?php endif; ?>
+      	<?php echo $this->layout()->content; ?>
+	  </div>
+      
+      <footer>
+        <p>&copy; <?php echo $this->i18n->t('application.name').' '.date("Y",time()); ?></p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>

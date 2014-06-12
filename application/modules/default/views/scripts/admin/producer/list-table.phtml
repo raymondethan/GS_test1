@@ -1,0 +1,21 @@
+       		<form name="list_form" action="" method="POST">
+       		<table class="bordered-table zebra-striped">
+				<thead>
+					<tr id="table_headers">
+		       			<th><input id="check_all" class="nomargin" type="checkbox" name="check_all" value="" /></th>
+		       			<th id="order_name" class="order_cell header"><?php echo $this->i18n->t('form.name'); ?></th>
+		       			<th id="order_stories_count" class="order_cell header"><?php echo $this->i18n->t('form.used_by').' ('.$this->i18n->t('content.type_storys').')'; ?></th>
+					</tr>
+				</thead>
+				<tbody>
+		            <?php foreach ($this->producers as $producer): ?>
+		            <tr>
+		            	<td><input class="nomargin check_list" type="checkbox" name="check_list[<?php echo $producer['id']; ?>]" value="" /></td>
+		            	<td><a href="<?php echo $this->url(array('content_action' => 'edit','content_type' => 'producer','params' => http_build_query(array('id' => $producer['id']))),'admin_content',true,false); ?>"><?php echo $producer['name']; ?></a></td>
+		            	<td><a href="<?php echo $this->url(array('content_action' => 'list','content_type' => 'story','params' => http_build_query(array('producer' => $producer['id']))),'admin_content',true,false); ?>"><?php echo $producer['stories_count']; ?></a></td>
+		            </tr>   
+		            <?php endforeach; ?>
+				</tbody>
+       		</table>
+       		</form>
+       		<?php echo $this->paginationControl($this->producers, 'Sliding', 'pagination-ajax.phtml',array('i18n' => $this->i18n,'callback' => 'load_list_table')); ?>

@@ -1,0 +1,59 @@
+<?php error_reporting(0); ?>
+<div class="user-messages two-cta">
+<ul>
+    <?php 
+		$user_recommends = $this->user_recommends;	
+		$user_views = $this->user_views;	
+	?>
+<?php if ((isset($this->community_maps)) && (count($this->community_maps) > 0)){ ?>
+
+	<?php foreach ($this->community_maps as $community_map): ?>
+	
+	<?php if (($user_recommends==$community_map['user'])|| ($user_views==$community_map['user'])){ ?>
+			<li class="active">
+	<?php } else { ?>
+			<li>
+	<?php } ?>
+	
+                    <div>
+                            <figure>
+					<?php $avatar = 'https://graph.facebook.com/'.$community_map['fb_user_id'].'/picture'; ?>
+					<script type="text/javascript">
+					
+						if (typeof images_loading['<?php echo $community_map['fb_user_id']; ?>'] == 'undefined') {
+							images_loading['<?php echo $community_map['fb_user_id']; ?>'] = new Image();
+							images_loading['<?php echo $community_map['fb_user_id']; ?>'].src = '<?php echo $avatar; ?>';
+						}
+						
+					</script>
+					<img width="39" src="<?php echo $avatar; ?>" alt="" />
+					<span></span>
+				</figure>
+			<h4><?php echo $community_map['first_name']; ?>&nbsp;<?php echo $community_map['last_name']; ?></h4>
+
+					<div class="stories-watched">
+						<?php $full_views = $community_map['cnt'] + $community_map['shared']; ?>
+						<?php if (($user_views > 0) && ($user_views==$community_map['user'])){ ?>
+							<a href="#" class="user_views active" id="user_views_<?php echo $community_map['user']; ?>">Viewed <?php echo $full_views; ?> stories</a>
+						<?php } else { ?>	
+							<a href="#" class="user_views" id="user_views_<?php echo $community_map['user']; ?>">Viewed <?php echo $full_views; ?> stories</a>
+						<?php } ?>		
+					</div>
+			
+						
+                        <div class="stories-watched">
+
+							<?php if (($user_recommends > 0) && ($user_recommends==$community_map['user'])){ ?>
+								<a href="#" class="user_recommends active" id="user_recommends_<?php echo $community_map['user']; ?>">Recommends <?php echo $community_map['shared']; ?> stories</a>
+							<?php } else { ?>	
+								<a href="#" class="user_recommends" id="user_recommends_<?php echo $community_map['user']; ?>">Recommends <?php echo $community_map['shared']; ?> stories</a>
+							<?php } ?>
+						</div>
+                    </div>
+                    </li>
+	<?php endforeach; ?>
+<? } ?>
+</ul>
+</div>
+<?php die(); ?>
+

@@ -1,0 +1,21 @@
+				<div id="stories">
+					<h2>Stories</h2>
+					<ul class="tabs">
+						<li>
+							<a class="top-stories" href="#stories-top" title="stories-top">Top stories</a>
+						</li>
+						<li>
+							<a class="recent-stories" href="#stories-recent" title="stories-recent">Recent stories</a>
+						</li>
+					</ul>
+					
+					<div id="stories-top" class="stories-browser">
+						<?php $this->items = $this->top_stories; ?>
+						<?php echo $this->render('home/generate-top-recent-stories.phtml'); ?>
+					</div>
+
+					<div id="stories-recent" class="stories-browser">
+					<?php $this->items = $this->recent_stories; ?>
+						<?php echo $this->render('home/generate-top-recent-stories.phtml'); ?>
+					</div>
+				</div>

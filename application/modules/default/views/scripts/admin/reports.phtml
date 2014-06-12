@@ -1,0 +1,23 @@
+<div id="reports_page" class="page_wrapper">
+    <div class="content_inner">
+		<div class="sidebar">
+			<div class="well">
+				<h2><?php echo $this->i18n->t('reports.popularity'); ?></h2>
+				<?php $content_types = array('story','category','tag','media-type'); ?>
+				<table class="content-table bordered-table zebra-striped">
+				<?php foreach ($content_types as $content_type): ?>
+				  	<tr>
+				  		<td>
+		                    <div class="row_name"><?php echo $this->i18n->t('content.type_'.$content_type); ?></div>
+		                    <div class="row_links">
+								<a href="<?php echo $this->url(array('content_type' => $content_type,'content_action' => 'report'),'admin_content',true,false); ?>"><?php echo $this->i18n->t('link.excel'); ?></a>
+		                    </div>
+		                    <div class="clear"></div>
+				  		</td>
+				  	</tr>
+				<?php endforeach; ?>
+				</table>
+			</div>
+		</div>	
+    </div>
+</div>

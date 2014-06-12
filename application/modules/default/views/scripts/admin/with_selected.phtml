@@ -1,0 +1,32 @@
+                <div class="with_selected">
+                	<select name="with_selected">
+                		<option value=""><?php echo $this->i18n->t('select.with_selected'); ?></option>
+                		<option value="<?php echo $this->url(array('content_type' => $this->content_type,'content_action' => 'delete','action' => 'are-you-sure'),'admin',true,false); ?>"><?php echo $this->i18n->t('form.delete'); ?></option>
+                	</select>
+                </div>
+                <script type="text/javascript">
+
+                var list_form_data;
+                
+                $(document).ready(function(){
+
+					var with_selected_handler = function(){
+						$("select[name=with_selected]").unbind('change');
+						$("#flashMsgs").html('');
+						
+						list_form_data = $("form[name=list_form]").serialize();
+						
+						if (list_form_data.trim() != '') {
+							$.fancybox({href: $(this).val()});
+						}
+						else {
+							$("#flashMsgs").append('<div class="noticeMsgs"><ul><li><?php echo $this->i18n->t('notice.selected_at_least_one'); ?></li></ul></div>');
+						}
+						
+						$(this).val('');
+						$("select[name=with_selected]").bind('change',with_selected_handler);
+					};
+					$("select[name=with_selected]").bind('change',with_selected_handler);
+
+                });
+                </script>

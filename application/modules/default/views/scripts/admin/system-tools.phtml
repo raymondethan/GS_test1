@@ -1,0 +1,88 @@
+<div id="system_tools_page" class="page_wrapper">
+    <div class="content_inner">
+    	<div id="reindex_stories_search">
+        	<a title="<?php echo $this->i18n->t('system_tools.reindex_stories_search'); ?>" href="<?php echo $this->url(array('action' => 'system-tools','task' => 'reindex-stories-search'),'admin',true,false); ?>"><?php echo $this->i18n->t('system_tools.reindex_stories_search'); ?></a>
+        	<div id="reindex_stories_search_response"></div>
+        	<div class="clear"></div>
+        </div>
+        <!--
+        <div id="reimport_statistics_data">
+        	<a title="<?php //echo $this->i18n->t('system_tools.reimport_statistics_data'); ?>" href="<?php //echo $this->url(array('action' => 'system-tools','task' => 'reimport-statistics-data'),'admin',true,false); ?>"><?php //echo $this->i18n->t('system_tools.reimport_statistics_data'); ?></a>
+        	&nbsp;|&nbsp;
+        	<a title="<?php //echo $this->i18n->t('system_tools.fix_empty_statistics_data'); ?>" href="<?php //echo $this->url(array('action' => 'system-tools','task' => 'fix-empty-statistics-data'),'admin',true,false); ?>"><?php //echo $this->i18n->t('system_tools.fix_empty_statistics_data'); ?></a>
+        	<div id="reimport_statistics_data_response"></div>
+        	<div class="clear"></div>
+        </div>
+         -->
+    </div>
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+		<?php if ($this->task == 'reindex-stories-search'): ?>
+			var stories = <?php echo Zend_Json::encode($this->stories); ?>;
+			var i = 0;
+
+			if (stories.length > 0){
+				$("#reindex_stories_search_response").html('<?php echo $this->i18n->t('system_tools.now_reindexing'); ?> <span class="count">'+(i+1)+'</span> <?php echo $this->i18n->t('system_tools.of'); ?> '+stories.length+' <?php echo $this->i18n->t('system_tools.stories'); ?>');
+	
+				var reindex_one_story_search = function(){
+					$.ajax({
+		                url: '<?php echo $this->url(array('action' => 'reindex-one-story-search'),'admin',true,false); ?>',
+		                data: {id: stories[i]['id']},
+		                success: function(data){
+		                	i++;
+		                	$("#reindex_stories_search_response .count").html((i+1));
+	
+		                	if (typeof stories[i] != 'undefined'){
+		                		reindex_one_story_search();
+			                }
+		                	else {
+		                		$("#reindex_stories_search_response").html('<?php echo $this->i18n->t('system_tools.completed'); ?>');
+			                }
+		                }
+		            });
+				};
+				reindex_one_story_search();
+			}
+			else {
+				$("#reindex_stories_search_response").html('<?php echo $this->i18n->t('system_tools.completed'); ?>');
+			}
+		<?php endif; ?>
+		
+		<?php //if ($this->task == 'reimport-statistics-data' || $this->task == 'fix-empty-statistics-data'): ?>
+			/*var stats = <?php echo Zend_Json::encode($this->stats); ?>;
+			var i = 0;
+
+			if (stats.length > 0){
+				$("#reimport_statistics_data_response").html('<?php echo $this->i18n->t('system_tools.now_reimporting'); ?> <span class="count">'+(i+1)+'</span> <?php echo $this->i18n->t('system_tools.of'); ?> '+stats.length+' <?php echo $this->i18n->t('system_tools.indicators'); ?> ');
+	
+				var reimport_one_stat_data = function(){
+					$.ajax({
+		                url: '<?php echo $this->url(array('action' => 'reimport-one-stat-data'),'admin',true,false); ?>',
+		                data: {indicator: stats[i]['indicator']},
+		                success: function(data){
+		                	i++;
+		                	$("#reimport_statistics_data_response .count").html((i+1));
+	
+		                	if (typeof stats[i] != 'undefined'){
+		                		reimport_one_stat_data();
+			                }
+		                	else {
+		                		$("#reimport_statistics_data_response").html('<?php echo $this->i18n->t('system_tools.completed'); ?>');
+			                }
+		                }
+		            });
+				};
+				reimport_one_stat_data();
+			}
+			else {
+				$("#reimport_statistics_data_response").html('<?php echo $this->i18n->t('system_tools.completed'); ?>');
+			}*/
+		<?php //endif; ?>
+		
+	});
+
+</script>

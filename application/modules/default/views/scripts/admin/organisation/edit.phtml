@@ -1,0 +1,81 @@
+<script type="text/javascript">
+    var organisation_list_params = {};
+    organisation_list_params['organisation-type'] = {type:'select',model: 'Organisation',method: 'getOrganisationTypes',name: 'organisation_type',selected: '<?php echo @$this->form['organisation_type']; ?>'};
+    organisation_list_params['location'] = {type:'select',model: 'Location',method: 'getLocations',name: 'location',selected: '<?php echo @$this->form['location']; ?>','onComplete': 'location_change'};
+</script>
+
+<div id="content_page" class="page_wrapper<?php echo (!is_null($this->fancybox)) ? ' fancybox_page' : ''; ?>">
+    <div class="content_inner">
+        <h2><?php echo ($this->form['id'] > 0) ? $this->i18n->t($this->form['type'].'.edit') : $this->i18n->t($this->form['type'].'.add'); ?></h2>
+        <div class="content_form">
+            <form name="<?php echo $this->form['type']; ?>" action="<?php echo $this->url(array('content_type' => $this->form['type'],'content_action' => 'save','params' => http_build_query($this->form['params'])),'admin_content',true,false); ?>" method="POST">
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('content.type_organisation-type'); ?>:</div>
+                <div id="organisation-type" class="form_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.name'); ?>:</div>
+                <div class="form_value"><input type="text" name="name" value ="<?php echo htmlentities(@$this->form['name']); ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.website_url'); ?>:</div>
+                <div class="form_value"><input type="text" name="website_url" value ="<?php echo @$this->form['website_url']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.facebook_url'); ?>:</div>
+                <div class="form_value"><input type="text" name="facebook_url" value ="<?php echo @$this->form['facebook_url']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.donate_url'); ?>:</div>
+                <div class="form_value"><input type="text" name="donate_url" value ="<?php echo @$this->form['donate_url']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('content.type_location'); ?>:</div>
+                <div id="location" class="form_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.geolocation'); ?>:</div>
+                <div class="form_value">
+                    <div id="geolocation"></div>
+                    <script type="text/javascript">
+                    	var map;
+                    	var gmap_markers = <?php echo Zend_Json::encode($this->form['geolocations']); ?>;
+                    </script>
+                    <?php $i = 0; ?>
+                    <?php foreach ($this->form['geolocations'] as $geolocation): ?>
+                    <input id="geolocation_<?php echo $i; ?>" class="geolocation_hidden" name="geolocation[<?php echo $i; ?>]" value="<?php echo $geolocation; ?>" type="hidden" />
+                	<?php $i++; endforeach; ?>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row submit_row">
+                <div class="form_submit"><a class="btn primary large submit_button"><?php echo (@$this->form['id'] > 0) ? $this->i18n->t('form.save') : $this->i18n->t('form.add'); ?></a></div>
+                <div class="form_validate_error"></div>
+                <div class="clear"></div>     
+            </div>
+            <input type="hidden" name="id" value="<?php echo $this->form['id']; ?>" />
+            </form>
+        </div>    
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    var generate_location_string_url = '<?php echo $this->url(array('action' => 'generate-location-string','controller' => 'ajax'),'action',true,false); ?>';
+    
+    $(document).ready(function(){
+        
+        $.each(organisation_list_params,function(k,v){
+            generate_list('<?php echo $this->url(array('action' => 'generate-list','controller' => 'ajax'),'action',true,false); ?>',k,v);
+        });
+
+    });
+</script>    
+
+<?php echo $this->render('admin/sumbit_button_handler.phtml'); ?>

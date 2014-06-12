@@ -1,0 +1,23 @@
+       		<form name="list_form" action="" method="POST">
+       		<table class="bordered-table zebra-striped">
+				<thead>
+					<tr id="table_headers">
+		       			<th><input id="check_all" class="nomargin" type="checkbox" name="check_all" value="" /></th>
+		       			<th id="order_name" class="order_cell header"><?php echo $this->i18n->t('form.name'); ?></th>
+		       			<th id="order_country" class="order_cell header"><?php echo $this->i18n->t('content.type_country'); ?></th>
+		       			<th id="order_locations_count" class="order_cell header"><?php echo $this->i18n->t('form.used_by').' ('.$this->i18n->t('content.type_locations').')'; ?></th>
+					</tr>
+				</thead>
+				<tbody>
+		            <?php foreach ($this->cities as $city): ?>
+		            <tr>
+		            		<td><input class="nomargin check_list" type="checkbox" name="check_list[<?php echo $city['id']; ?>]" value="" /></td>
+		            		<td><a href="<?php echo $this->url(array('content_action' => 'edit','content_type' => 'city','params' => http_build_query(array('id' => $city['id']))),'admin_content',true,false); ?>"><?php echo $city['name']; ?></a></td>
+		            		<td><?php echo $city['country_name']; ?></td>
+		            		<td><a href="<?php echo $this->url(array('content_action' => 'list','content_type' => 'location','params' => http_build_query(array('city' => $city['id']))),'admin_content',true,false); ?>"><?php echo $city['locations_count']; ?></a></td>
+		            </tr>   
+		            <?php endforeach; ?>
+				</tbody>
+       		</table>
+       		</form>
+       		<?php echo $this->paginationControl($this->cities, 'Sliding', 'pagination-ajax.phtml',array('i18n' => $this->i18n,'callback' => 'load_list_table')); ?>

@@ -1,0 +1,38 @@
+			<nav id="accessibility-nav">
+				<ol>
+					<li>
+						<a href="#navigation">Skip to navigation</a>
+					</li>
+					<li>
+						<a href="#content">Skip to content</a>
+					</li>
+					<li>
+						<a href="#sidebar">Skip to sidebar</a>
+					</li>
+				</ol>
+			</nav>
+			<!-- / accessibility-nav -->
+			<header id="header">
+				<h1 class="site-name"><a title="<?php echo $this->i18n->t('application.name'); ?>" href="<?php echo $this->url(array(),'default',true,false); ?>"><?php echo $this->i18n->t('application.name'); ?></a></h1>
+				<?php if (is_array($this->categories)): ?>
+				<nav id="story-navigation">
+					<h2>Select STORIES about</h2>
+					<ul>
+						<?php @$categories_instead_of = explode(",",$this->params['cio']); ?>
+						<?php foreach ($this->categories as $k => $v): ?>
+						<li>
+							<a id="category_<?php echo $k; ?>" class="category_button story-<?php echo strtolower($v['short_name']); ?><?php echo (in_array($k,$categories_instead_of)) ? ' inactive' : ''; ?>" data-story-type="<?php echo strtolower($v['short_name']); ?>" title="<?php echo $v['name']; ?>" href="#"><?php echo $v['name']; ?></a>
+						</li>
+						<?php endforeach; ?>
+                                                <li>
+                                                    <a id="category_reset" class="category_reset_button story-reset <?php echo (!$this->params['cio']) ? ' inactive' : ''; ?>" data-story-type="reset" title="Reset" href="/">See all stories</a>
+                                                </li>
+					</ul>
+					<?php if ($this->first_time_user): ?>
+					<div class="tooltip">You can select stories by category here<span></span></div>
+					<?php endif; ?>
+				</nav>
+				<?php endif; ?>
+				<!--<a class="back-to-map" href="<?php echo $this->url(array(),'default',true,false); ?>">Back to Map</a>-->
+			</header>
+			<!-- / header -->

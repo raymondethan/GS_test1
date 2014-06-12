@@ -1,0 +1,17 @@
+<div id="content_page" class="page_wrapper">
+    <div class="content_inner">
+       	<div id="flashMsgs">  
+       	<?php 
+       		if (trim($this->placeholder('messages')) != '') {
+       			echo $this->placeholder('messages');
+       		} 
+       	?>
+       	</div>
+        <div class="search"><input id="search" type="text" value="<?php echo @$this->params['search']; ?>" /></div>
+        	<?php echo $this->render('admin/with_selected.phtml'); ?>
+        <div class="add_item"><a class="btn primary large" href="<?php echo $this->url(array('content_type' => 'media-type','content_action' => 'edit'),'admin_content',true,false); ?>"><?php echo $this->i18n->t('media-type.add'); ?></a></div>
+        <div class="clear"></div>
+        <div id="list_table"></div>
+    </div>
+</div>
+<?php echo $this->render('admin/list_table_handler.phtml'); ?>

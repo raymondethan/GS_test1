@@ -1,0 +1,54 @@
+		<meta charset="utf-8" />
+		<?php 
+			$title_parts = array();
+			($this->page_title != '') ? $title_parts[] = $this->page_title : '';
+			$title_parts[] = $this->i18n->t('application.name');
+			$title = implode(" - ",$title_parts);
+		?>
+		<title><?php echo $title; ?></title>
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<meta name="keywords" content="<?php echo $this->page_keywords; ?>" />
+		<meta name="description" content="<?php echo $this->page_meta; ?>" />
+		<meta property="og:title" content="<?php echo (!is_null($this->story)) ? trim(str_replace('"',"'",$this->story['name'])) : 'Global Stories'; ?>" />
+		<meta property="og:image" content="<?php echo 'http://'.$_SERVER['HTTP_HOST'].((!is_null($this->story)) ? $this->story['thumbnail'] : '/images/logo_facebook.jpg'); ?>" />		
+		<meta property="og:type" content="<?php echo (!is_null($this->story)) ? 'article' : 'website'; ?>" />
+		<meta property="og:url" content="<?php echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; ?>" />
+		<meta property="og:description" content="<?php echo (!is_null($this->story)) ? trim(preg_replace(array("/\r\n/",'/"/'),array(' ',"'"),$this->story['description'])) : 'Learn about the world we live in'; ?>." />		
+		<meta property="og:site_name" content="<?php echo $this->i18n->t('application.name'); ?>" />
+		<meta property="fb:app_id" content="<?php echo $this->i18n->t('application.facebook_id'); ?>" />	
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+	
+
+		<?php echo $this->headLink(); ?>
+		
+		<!--[if lt IE 9]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<!--[if lte IE 7]>
+			<link rel="stylesheet" type="text/css" media="all" href="/css/all-ie.css">
+		<![endif]-->
+		<script type="text/javascript">
+		
+			var stories = <?php echo (count($this->stories) > 0) ? Zend_Json::encode($this->stories) : '[]'; ?>;
+			var story_id_to_key = <?php echo (count($this->story_id_to_key) > 0) ? Zend_Json::encode($this->story_id_to_key) : '[]'; ?>;
+			var stories_url = '<?php echo $this->url(array(),'stories',true,false).'/'; ?>';
+			var url_params = <?php echo (count($this->url_params) > 0) ? Zend_Json::encode($this->url_params) : '{}'; ?>;
+			var ajax_data = {};
+			var ajax_urls = {'get-stories': '<?php echo $this->url(array('action' => 'get-stories'),'action',true,false); ?>',
+					 		 'generate-tags-list': '<?php echo $this->url(array('action' => 'generate-tags-list'),'action',true,false); ?>',
+							 'generate-producers-list': '<?php echo $this->url(array('action' => 'generate-producers-list'),'action',true,false); ?>',
+							 'log-search-term': '<?php echo $this->url(array('action' => 'log-search-term'),'action',true,false); ?>',
+							 'generate-list': '<?php echo $this->url(array('action' => 'generate-list','controller' => 'ajax'),'action',true,false); ?>',
+							 'generate-chart-data': '<?php echo $this->url(array('action' => 'generate-chart-data','controller' => 'ajax'),'action',true,false); ?>'
+							};
+			var ajax_updates = [];
+			var ajax_requests = [];
+			var ajax_loading = false;
+			var images_loading = {};
+			var active_footer_menu = '<?php echo (!is_null($this->active_footer_menu)) ? $this->active_footer_menu : ''; ?>';
+			
+		</script>
+		<?php echo $this->headScript(); ?>

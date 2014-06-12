@@ -1,0 +1,50 @@
+<script type="text/javascript">
+
+	var basic_url = '<?php echo $this->url(array('content_type' => $this->content_type,'content_action' => 'list'),'admin_content',true,false); ?>';
+	var params = <?php echo Zend_Json::encode($this->params); ?>;
+	
+    $(document).ready(function(){
+        
+		load_list_table();
+		
+        var search_default_value = '<?php echo $this->i18n->t('form.search'); ?>';
+        var check_search_default_value = function(){
+            if ($("#search").val() == '') {
+                $("#search").val(search_default_value);
+            }
+        }
+        
+        check_search_default_value();
+
+        $("#search").bind('blur',function(){
+            check_search_default_value();
+        });
+        
+        $("#search").bind('click',function(){
+            if ($("#search").val() == search_default_value) {
+                $("#search").val('');
+            }
+        });
+
+		var search_keypress_handler = function(e) {
+			$("#search").unbind('keypress');
+
+			var code = (e.keyCode ? e.keyCode : e.which);
+			var search_items = function(){
+				var search_value = $("#search").val();
+	        	(search_value != '') ? params['search'] = search_value : delete params['search'];
+	            load_list_table();
+	            $("#search").bind('keypress',search_keypress_handler);
+			};
+			
+			if (code == '13') {
+				search_items();
+			}
+			else {
+				setTimeout(search_items,1500);
+			}
+		};
+        $("#search").bind('keypress',search_keypress_handler);
+       
+    });
+</script>

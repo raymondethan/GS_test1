@@ -1,0 +1,18 @@
+<select name="<?php echo $this->params['name']; ?>">
+    <?php if(isset($this->params['first_label'])): ?>
+    <option value=""><?php echo $this->params['first_label']; ?></option>
+    <?php endif; ?>
+    <?php foreach ($this->result as $res): ?>
+    <option value="<?php echo $res[$this->params['value_field']]; ?>"<?php echo ($this->params['selected'] == $res[$this->params['value_field']]) ? ' selected="selected"' : ''; ?>><?php echo $res[$this->params['label_field']]; ?></option>
+    <?php endforeach; ?>
+</select>
+
+<?php if(isset($this->params['onComplete'])): ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        <?php echo $this->params['onComplete'].'();'; ?>
+    });
+</script>
+<?php endif; ?>
+
+<?php die(); ?>

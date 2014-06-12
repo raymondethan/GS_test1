@@ -1,0 +1,10 @@
+		<div class="story-preview preview-photo">
+			<?php $media_content_url_has_tags = (strlen($this->story['media_content_url']) != strlen(strip_tags($this->story['media_content_url']))) ? true : false; ?>
+			<a class="story-preview-launch" href="<?php echo (!$media_content_url_has_tags) ? $this->story['media_content_url'] : '#'; ?>" rel="external">
+				<span>Interact</span>
+				<strong>Click to launch story</strong>
+			</a>
+			<?php if ($media_content_url_has_tags): ?>
+			<div class="story-preview-html"><?php echo $this->story['media_content_url']; ?></div>
+			<?php endif; ?>
+		</div>

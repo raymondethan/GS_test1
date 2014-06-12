@@ -1,0 +1,98 @@
+        <?php $identity = Zend_Auth::getInstance()->getIdentity(); ?>
+        <div class="row">
+          <div class="span13">
+            	  <?php foreach ($this->blocks as $title => $info): 
+            	  			$show_block = false;
+            	  			foreach ($info as $k => $row) {
+            	  				if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_edit') || $this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_list')) {
+            	  					$show_block = true;
+            	  					break;
+            	  				}	
+            	  			} ?>
+            	  <?php if ($show_block): ?>			
+			  <div class="sidebar">
+		        <div class="well">
+				  <h2><?php echo $this->i18n->t('content.block_title_'.$title); ?></h2>
+				  <table class="content-table bordered-table zebra-striped">
+                	  <?php foreach ($info as $row): ?>
+                	  	<?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_edit') || $this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_list')): ?>
+				  	<tr>
+				  		<td>
+		                    <div class="row_name"><?php echo $this->i18n->t('content.type_'.$row); ?></div>
+		                    <div class="row_links">
+		                    	<?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_edit')): ?>
+		                        <a href="<?php echo $this->url(array('content_type' => $row,'content_action' => 'edit'),'admin_content',true,false); ?>"><?php echo $this->i18n->t('link.add'); ?></a>
+		                        <?php endif; ?>
+		                        <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_edit') && $this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_list')): ?>
+		                        &nbsp;|&nbsp;
+		                        <?php endif; ?>
+		                        <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$row.'_list')): ?>
+		                        <a href="<?php echo $this->url(array('content_type' => $row,'content_action' => 'list'),'admin_content',true,false); ?>"><?php echo $this->i18n->t('link.change'); ?></a>
+		                    	<?php endif; ?>
+		                    </div>
+		                    <div class="clear"></div>
+				  		</td>
+				  	</tr>
+				  	<?php endif; ?>
+                  <?php endforeach; ?>
+                  </table>
+                </div>  
+            	  </div>
+            	  <?php endif; ?>
+            <?php endforeach; ?>
+          </div>
+          <div class="span7">
+          	<?php if ($this->acl->isAllowed($identity->user_type,NULL,'block_counter')): ?>
+			  <div class="sidebar">
+		        <div class="well">
+		          <h2><?php echo $this->i18n->t('content.block_title_counter'); ?></h2>
+		          <ul>
+					<?php foreach ($this->counter as $content_type => $count): ?>
+					<?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_'.$content_type.'_list')): ?>
+					<li><a href="<?php echo $this->url(array('content_type' => $content_type,'content_action' => 'list'),'admin_content',true,false); ?>"><?php echo $count.' - '.(($count > 1) ? $this->i18n->t('content.type_'.$content_type.'s') : $this->i18n->t('content.type_'.$content_type)); ?></a></li>
+					<?php endif; ?>
+					<?php endforeach; ?>	
+				  </ul>
+		        </div>
+		      </div>
+		      <?php endif; ?>
+		      <?php if ($this->acl->isAllowed($identity->user_type,NULL,'block_recent_changes')): ?>
+			  <div class="sidebar">
+		        <div class="well">
+		          <h2><?php echo $this->i18n->t('content.block_title_recent_changes'); ?></h2>
+				  <ul>
+				  	<?php foreach ($this->log as $log): ?>
+					<li>
+						<?php echo $log['user_name'].' '.$this->i18n->t('log.'.$log['action']).' '; ?>
+						<?php 
+							if ($log['action'] != 'deleted') {
+								echo strtolower($this->i18n->t('content.type_'.$log['content_type'])).' <b>"'.$log['info'].'"</b>';
+							}
+							else {
+								echo '<b>'.$log['info'].'</b> '.strtolower(($log['info'] > 1) ? $this->i18n->t('content.type_'.$log['content_type'].'s') : $this->i18n->t('content.type_'.$log['content_type']));
+							}
+						?>
+						<?php 
+							$dhms = App_Helper::_secondsToDhms(time() - strtotime($log['date'])); 
+							if ($dhms['day'] > 0) {
+	                		        echo $dhms['day'].' '.(($dhms['day'] > 1) ? $this->i18n->t('title.days') : $this->i18n->t('title.day'));
+	                        }
+	                        elseif ($dhms['hour'] > 0) {
+	                    		    echo $dhms['hour'].' '.(($dhms['hour'] > 1) ? $this->i18n->t('title.hours') : $this->i18n->t('title.hour'));
+	                        }
+	                        elseif ($dhms['minute'] > 0) {
+	                        		echo $dhms['minute'].' '.(($dhms['minute'] > 1) ? $this->i18n->t('title.minutes') : $this->i18n->t('title.minute'));
+	                        }
+	                        else {
+	                        		echo $dhms['second'].' '.(($dhms['second'] > 1) ? $this->i18n->t('title.seconds') : $this->i18n->t('title.second'));
+	                        }
+	                        echo ' '.$this->i18n->t('log.ago');
+						?>
+					</li>
+					<?php endforeach; ?>	
+				  </ul>
+		        </div>
+		      </div>
+		      <?php endif; ?>
+          </div>
+        </div>

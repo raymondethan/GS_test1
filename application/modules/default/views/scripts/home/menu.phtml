@@ -1,0 +1,8 @@
+          <ul class="nav">
+			<?php foreach ($this->menus as $menu):
+			        $url = $this->url($menu['params'],$menu['route'],true,false);
+			        $is_active = ($_SERVER['REQUEST_URI'] == $url || $this->set_active == $menu['name']) ? true : false; 
+			        if ($this->acl->isAllowed(Zend_Auth::getInstance()->getIdentity()->user_type,NULL,implode("_",$menu['params']))): ?>
+			    <li<?php echo ($is_active) ? ' class="active"' : ''; ?>><a href="<?php echo $url; ?>"><?php echo $this->i18n->t('menu.'.$menu['name']); ?></a></li>
+			<?php endif; endforeach; ?>
+          </ul>

@@ -1,0 +1,26 @@
+<div id="content_page" class="page_wrapper<?php echo (!is_null($this->fancybox)) ? ' fancybox_page' : ''; ?>">
+    <div class="content_inner">
+        <h2><?php echo ($this->form['id'] > 0) ? $this->i18n->t($this->form['type'].'.edit') : $this->i18n->t($this->form['type'].'.add'); ?></h2>
+        <div class="content_form">
+            <form name="<?php echo $this->form['type']; ?>" action="<?php echo $this->url(array('content_type' => $this->form['type'],'content_action' => 'save','params' => http_build_query($this->form['params'])),'admin_content',true,false); ?>" method="POST">
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.name'); ?>:</div>
+                <div class="form_value"><input type="text" name="name" value ="<?php echo htmlentities(@$this->form['name']); ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.continent_code'); ?>:</div>
+                <div class="form_value"><input type="text" maxlength="2" name="continent_code" value ="<?php echo @$this->form['continent_code']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row submit_row">
+                <div class="form_submit"><a class="btn primary large submit_button"><?php echo (@$this->form['id'] > 0) ? $this->i18n->t('form.save') : $this->i18n->t('form.add'); ?></a></div>
+                <div class="form_validate_error"></div>
+                <div class="clear"></div>     
+            </div>
+            <input type="hidden" name="id" value="<?php echo $this->form['id']; ?>" />
+            </form>
+        </div>    
+    </div>
+</div>
+<?php echo $this->render('admin/sumbit_button_handler.phtml'); ?>

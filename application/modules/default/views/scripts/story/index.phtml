@@ -1,0 +1,461 @@
+
+
+				<div id="story_<?php echo $this->story['id']; ?>" class="story-page">
+					<div class="story-media">
+						<div class="panel">
+							<div class="content">
+                                <div class="story-share-header">
+                                       <div class="promote">
+										<a class="back-to-map" href="<?php echo $this->url(array(),'default',true,false); ?>">Back to Map</a>
+										</div>
+                                                            </div>
+								<div id="add-map-section" class="story-share ">
+								
+								<?php 
+			
+									if (!($this->is_promoted_by_user)){ ?>
+                                   <div class="promote add-to-map" class="facebook-login">
+										<a href="#">Add to your map</a>
+										<span class="fig"></span>
+									</div>
+									 <div class="remove-from-map" style="display:none;">
+										<a href="#">Remove from your map</a>
+									</div>
+							
+						
+							
+								<?php } else { ?>
+									<div class="promote add-to-map" class="facebook-login" style="display:none;">
+										<a href="#">Add to your map</a>
+										<span class="fig"></span>
+									</div>
+									  <div class="remove-from-map">
+										<a href="#">Remove from your map</a>
+									</div>
+							
+							
+                          
+								<?php } ?>
+
+
+								
+                                         <p style="text-align:center;">Tell the world about the Global Stories you are passionate about.</p>
+                                  </div>
+                                                                <h2>Share this story ...</h2>
+                                                                <a class="share" href="#">Share</a>
+                                                                <div class="story-share">
+                                                                    <div class="addthis">
+										<!-- AddThis Button BEGIN -->
+										<div class="addthis_toolbox addthis_default_style" addthis:title="Watch this on #globalstories">
+											<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+											<a class="addthis_button_tweet" tw:count="none" tw:via="<?php echo $this->i18n->t('application.twitter_account'); ?>"></a>
+											<a class="addthis_button_google_plusone" g:plusone:size="medium" g:plusone:count="false"></a>
+											<a class="addthis_button_email"></a>
+										</div>
+										<!-- AddThis Button END -->
+									</div>
+								</div>
+								<div class="ad">
+									<div class="ad-image">
+										<?php if (count($this->ad) > 0): ?>
+										<a target="_blank" title="<?php echo $this->ad['name']; ?>" href="<?php echo $this->ad['url']; ?>"><img alt="<?php echo $this->ad['name']; ?>" src="/uploads/ad/<?php echo $this->ad['image']; ?>" /></a>
+										<?php endif; ?>
+									</div>
+								</div>
+							</div>
+							<div class="footer">
+								<div class="story-twitter">
+									<?php
+										if ($this->producer['twitter_url'] != '') { 
+											if (strpos($this->producer['twitter_url'],'http://') !== false || strpos($this->producer['twitter_url'],'https://') !== false) {
+												$twitter_parts = explode("/#!/",$this->producer['twitter_url']);
+												$twitter = end($twitter_parts);
+											}
+											else {
+												$twitter = $this->producer['twitter_url'];
+											}
+										}
+										else {
+											$twitter = $this->i18n->t('application.twitter');
+										}
+									?>
+									<div style="margin-bottom:20px;padding-bottom:10px;">
+										<a style="padding-bottom:10px;" target="_blank" href="https://twitter.com/#!/<?php echo $twitter; ?>" rel="external" class="twitter-follow">Follow</a>
+									</div>
+									<!-- <div id="story-twitter-<?php echo $this->story['id']; ?>" data-twitter-search="<?php echo $twitter; ?>" data-twitter-title="News by <?php echo $twitter; ?>"></div>
+									-->
+								<?php
+									session_start();
+									require_once("/var/hosting/global/public_html/public/twitteroauth-master/twitteroauth/twitteroauth.php");
+									
+									
+									/**
+									 * Format the time when displaying our latest Tweets
+									 */
+									function ago($time){
+									   $periods = array("second", "minute", "hour", "day", "week", "month", "year");
+									   $lengths = array("60","60","24","7","4.35","12","10");
+									 
+									   $now = time();
+									   $difference = $now - $time;
+									   $tense = "ago";
+									 
+									   for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+										   $difference /= $lengths[$j];
+									   }
+									 
+									   $difference = round($difference);
+									 
+									   if($difference != 1) {
+										   $periods[$j].= "s";
+									   }
+									 
+									   return "$difference $periods[$j] ago ";
+									}
+									
+									// $search = "from:@".strtolower($twitter)";
+									// $search = "@chocolotti";
+									$notweets = 50;
+									$consumerkey = "SUdg0KHUMGFtFVGm48mVog";
+									$consumersecret = "9kg75Rm87Y6WmB6HkU6F1Nd0RYgNq6DVRzTs4W0Dlc";
+									$accesstoken = "250683599-092GC5qC0xIbWUPIXX7RsA6ypD5ZCTbdbSrlVqgJ";
+									$accesstokensecret = "yhGmTbicYSocICEYtNvcjSDdokYwoRtgLw99JD4JcY";
+								
+  
+									function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oauth_token_secret) {
+									  $connection = new TwitterOAuth($cons_key, $cons_secret, $oauth_token, $oauth_token_secret);
+									  return $connection;
+									}
+									   
+									$connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
+									
+										$tweets = $connection->get("https://api.twitter.com/1.1/search/tweets.json?" , array('q'=>'from:@'.strtolower($twitter), 'result_type'=>'mixed', 'include_entities'=>0));
+									
+									
+									$tweet_list = $tweets->statuses;
+					
+									?>
+								
+									 <div id="tweets_list" style="overflow-y: scroll; height:360px;color:#222222;">
+						
+									<ul>
+										<?php foreach($tweet_list as $tweet): ?>
+										<li style="padding-bottom:30px;" class="">
+											<div class="twitter-user" style="float:left;display:inline;">
+												<img style="float:left;display:inline;width:53px;padding:5px 5px 5px 0;"  src="<?=$tweet->user->profile_image_url;?>" />
+												
+
+												<h2 style="float:left;display:inline;width:160px;color: white;font-size: 1em;line-height: 1.3;padding-top:3px;"><?=$tweet->user->name;?></h2>
+												<h2 style="float:left;display:inline;width:160px;color: white;font-size: 1em;line-height: 1.3;margin:0;"><a href="http://twitter.com/<?=$tweet->user->screen_name;?>">&#64;<?=$tweet->user->screen_name;?></a></h2>
+												<?php
+													$twitterTime = strtotime($tweet->created_at);
+													$timeAgo = ago($twitterTime);
+												?>
+												<!--
+												<div class="meta" style="color: white;font-size: 0.77em;line-height: 1.3;"><a href="http://twitter.com/<?php echo $tweet->user->screen_name; ?>/statuses/<?php echo $tweet->id_str; ?>" class="jtwt_date"><?php echo $timeAgo; ?></a></div>
+												-->
+											</div>
+											<span><p style="clear:both;color:#919191;padding-right:4px;font-size:90%;">
+											<?php
+												$latestTweet = $tweet->text;
+												$latestTweet = preg_replace('/http:\/\/([a-z0-9_\.\-\+\&\!\#\~\/\,]+)/i', '<a href="http://$1" target="_blank">http://$1</a>', $latestTweet);
+												echo $latestTweet;
+											?>
+											</p></span>
+											<div class="meta" style="color: white;font-size: 0.77em;line-height: 1.3;"><a href="http://twitter.com/<?php echo $tweet->user->screen_name; ?>/statuses/<?php echo $tweet->id_str; ?>" class="jtwt_date"><?php echo $timeAgo; ?></a></div>
+										</li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
+								<!--
+								<a class="twitter-timeline" data-chrome="nofooter noheader noborders transparent" href="https://twitter.com/globalstories" data-widget-id="361852372395368448">Tweets by @globalstories</a>
+								<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+								-->
+								
+								
+					
+								</div>
+								<!-- /story-twitter -->
+							</div>
+						</div>
+						<?php echo $this->render('story/'.strtolower($this->media['name']).'.phtml'); ?>
+					</div>
+					
+					<div class="story-info">
+				
+						<div class="story-details">
+							<h2>More on this story...</h2>
+							<article>
+								<h1 class="story-name"><?php echo $this->story['name']; ?></h1>
+								<h1 class="story-date"><?php echo date("d/m/Y",strtotime($this->story['date'])); ?></h1>
+								<div class="clear"></div>
+								<h3 class="story-additional-info">by <a class="filter-by-producer" title="<?php echo $this->producer['name']; ?>" href="#" data-producer-id="<?php echo $this->producer['id']; ?>"><?php echo $this->producer['name']; ?></a> in <?php echo $this->location['name']; ?></h3>
+								<?php $thumbnail_size = explode("x",$this->i18n->t('image.story_thumbnail_size')); ?>
+								<img class="story-thumbnail hidden" width="<?php echo $thumbnail_size[0]; ?>" alt="<?php echo $this->story['name']; ?>" src="<?php echo $this->story['thumbnail']; ?>" />
+								<p class="story-description"><?php echo str_replace("\r\n", "<br />", $this->story['description']); ?></p>
+								<span class="fig"></span>
+							</article>
+							<div class="informations">
+								<dl>
+									<?php if (trim($this->producer['url']) != ''): ?>
+									<dt>Site</dt>
+									<dd class="site">
+										<?php
+											$site = trim($this->producer['url']);
+											$site = ($site[strlen($site) - 1] == '/') ? substr($site,0,-1) : $site;
+											$site = preg_replace(array('/http:\/\//','/https:\/\//'),array('',''),$site);
+										?>
+										<a target="_blank" title="<?php echo $this->producer['name']; ?>" href="<?php echo $this->producer['url']; ?>">Producer's Homepage</a>
+									</dd>
+									<?php endif; ?>
+									<?php if (trim($this->producer['facebook_url']) != ''): ?>
+									<dt>Facebook</dt>
+									<dd class="facebook">
+										<?php
+											$facebook = trim($this->producer['facebook_url']);
+											$facebook = ($facebook[strlen($facebook) - 1] == '/') ? substr($facebook,0,-1) : $facebook;
+											$facebook = preg_replace(array('/http:\/\//','/https:\/\//'),array('',''),$facebook);
+										?>
+										<a target="_blank" title="<?php echo $this->producer['name']; ?>" href="<?php echo $this->producer['facebook_url']; ?>">Facebook Page</a>
+									</dd>
+									<?php endif; ?>
+									<?php if (trim($this->story['media_source_url']) != ''): ?>
+									<dt>Source</dt>
+									<dd class="source">
+										<a target="_blank" title="<?php echo $this->story['name']; ?>" href="<?php echo $this->story['media_source_url']; ?>">Original Story Page</a>
+									</dd>
+									<?php endif; ?>
+									<?php if (count($this->story['links']) > 0): ?>
+									<dt>Links</dt>
+									<dd class="links">
+										Links
+										<?php foreach ($this->story['links'] as $k => $v): ?>
+										<a target="_blank" href="<?php echo (strpos($v,'http://') !== false || strpos($v,'https://') !== false) ? $v : 'http://'.$v; ?>"><?php echo ($k+1); ?></a>
+										<?php endforeach; ?>
+									</dd>
+									<?php endif; ?>
+									<?php if (is_array($this->tags)): ?>
+									<dt>Tags</dt>
+									<dd class="tags">
+										<?php 
+											foreach ($this->tags as $k => $v) {
+												if ($v != '') {
+													$this->tags[$k] = '<a class="filter-by-tag" title="'.ucfirst($v).'" href="#" data-tag-slug="'.$v.'">'.ucfirst($v).'</a>';
+												}
+												else {
+													unset($this->tags[$k]);
+												}
+											}
+										?>
+										<?php echo implode(", ",$this->tags); ?>
+									</dd>
+									<?php endif; ?>
+								</dl>
+								<a class="report" href="#">Report broken story?</a>
+								<a class="filter-by-category type-icon category-<?php echo strtolower($this->category['short_name']); ?> type-<?php echo strtolower($this->media['short_name']); ?>" title="<?php echo $this->category['name']; ?>" href="#" data-category-id="<?php echo $this->category['id']; ?>">
+									<strong></strong>
+									<span><?php echo $this->category['name']; ?></span>
+								</a>
+							</div>
+						</div>
+						<!-- /story-details -->
+				
+					</div>
+				</div>
+				
+				<script type="text/javascript">	
+				
+				
+					function update_users_stats(return_to_user){
+						$.ajax({
+							url: '<?php echo $this->url(array('action' => 'get-facebook-user','controller' => 'ajax'),'action',true,false); ?>',
+								success: function(data){
+								data = $.parseJSON(data);
+									if(typeof data['viewed_stories_count']  != 'undefined'){
+										var num_viewed = data['viewed_stories_count'];
+									 }
+									 else{
+										var num_viewed = 0;
+									 }
+									 
+									if(typeof data['shared_stories_count']  != 'undefined'){
+										var num_recommends = data['shared_stories_count'];
+									 }
+									 else{
+										var num_recommends  = 0;
+									 }
+									 
+									 var total_viewed = parseInt(num_viewed) + parseInt(num_recommends);
+									 
+                                    $(".current_user_views").html("viewed " + total_viewed  + " stories");
+                                    $(".current_user_views").attr("id", "user_views_"+data['id']);
+									
+									$(".current_user_recommends").html("Recommends " + data['shared_stories_count'] + " stories");
+                                    $(".current_user_recommends").attr("id", "user_recommends_"+data['id']);
+							
+				
+									if (return_to_user){
+										$(".current_user_recommends").click();
+									}
+								}
+						});
+					}
+				
+
+					function update_user_recommends(story_id, callback){
+						if(typeof callback != 'function'){
+							callback = function(){};
+						}
+						$.ajax({
+							url: '<?php echo $this->url(array('action' => 'log-promoted-story','controller' => 'ajax'),'action',true,false)?>',
+							type: 'POST',
+							data: {story_id: story_id, facebook_post_id: '0'},
+							success: function(data){
+								//$(".add-to-map").hide();
+								//$(".remove-from-map").show();
+								update_users_stats(true);
+								callback.call(this);
+							}
+						});
+					}
+
+
+					function update_user_removes(story_id, callback){
+						if(typeof callback != 'function'){
+							callback = function(){};
+						}
+						$.ajax({
+							url: '<?php echo $this->url(array('action' => 'remove-viewed-story','controller' => 'ajax'),'action',true,false)?>',
+							type: 'POST',
+							data: {story_id: story_id},
+							success: function(data){
+								$(".current_user_recommends").removeClass("active");
+								//$(".add-to-map").show();
+								//$(".remove-from-map").hide();
+								update_users_stats(true);
+								callback.call(this);
+							}
+						});
+					}
+					
+	
+					$(document).ready(function(){		
+
+	
+						var facebook_story_promote_click_handler = function(){
+							/* TDM  we've removed the above as we're uncoupling the facebook share facility with the "adding to map" option*/
+							$(".story-share .promote a").unbind('click');
+							var parent = $(this).parents('.story-page');
+							var story_id = parent.attr('id').replace('story_','');
+				
+							$(".story-share .promote a").bind('click',facebook_story_promote_click_handler);
+
+							var facebook_id = <?php echo $this->facebook_user_id; ?>;
+							
+							FB.getLoginStatus(function(response) {
+			
+								if (response.status === 'connected') {
+									update_user_recommends(story_id);
+								
+								} else {
+		
+									var facebook_login_click_handler_from_story = function(){
+										$("#add-map-section").unbind('click');
+										FB.login(function(response) {
+											$("#add-map-section").bind('click',facebook_login_click_handler_from_story);
+											update_user_recommends(story_id, function(){
+												$.ajax({
+													url: '<?php echo $this->url(array('action' => 'get-facebook-user','controller' => 'ajax'),'action',true,false)?>',
+													type: 'GET', 
+													dataType: 'json',
+													success: function(a){
+														var id = a.id;
+														if(typeof id != 'undefined'){
+															window.location = '/stories/userrecommends='+id;
+														}
+													}
+												});
+											});
+											return false;
+										},{scope:'user_about_me,user_birthday,user_education_history,user_hometown,user_religion_politics,user_relationships,user_work_history,user_interests,user_likes,user_videos'});
+									};
+
+									$("#add-map-section").bind('click',facebook_login_click_handler_from_story);
+								}
+							});
+
+						};
+						
+						
+						$(".story-share .promote a").bind('click',facebook_story_promote_click_handler);
+					
+
+						if (window.addthis) {
+							window.addthis.toolbox($("#story-pages .current .addthis_toolbox")[0],{},{
+								url: window.location.href
+							});
+						}
+						
+						var back_to_map_handler = function(){
+							update_users_stats(false);
+						};
+
+						$(".back-to-map").click(back_to_map_handler);
+                                                
+       
+						var remove_story_click_handler = function(){
+					
+							var parent = $(this).parents('.story-page');
+							var story_id = parent.attr('id').replace('story_','');
+							update_user_removes(story_id);
+						};
+
+						$(".remove-from-map").click(remove_story_click_handler);
+					
+						$(".filter-by-producer").bind('click',function(event){
+							$("#back-to-story").attr('href',window.location.pathname);
+							$("#back-to-story").show();
+							
+							all_on();
+							url_params = {'producers': $(this).attr('data-producer-id')};
+							
+							ajax_updates = ['stories','top_recent_stories','tags','producers'];
+							update_page();
+							update_history(event);
+						});
+
+						$(".filter-by-tag").bind('click',function(event){
+							$("#back-to-story").attr('href',window.location.pathname);
+							$("#back-to-story").show();
+							
+							all_on();
+							url_params = {'tags': $(this).attr('data-tag-slug')};
+							
+							ajax_updates = ['stories','top_recent_stories','tags','producers'];
+							update_page();
+							update_history(event);
+						});
+
+						$(".filter-by-category").bind('click',function(event){
+							$("#back-to-story").attr('href',window.location.pathname);
+							$("#back-to-story").show();
+							
+							all_on();
+							url_params = {};
+							var category_id = $(this).attr('data-category-id');
+
+							$("#story-navigation ul a").each(function(){
+								var id = this.id.replace('category_','');
+
+								if (category_id != id) {
+									$(this).addClass('inactive');
+									update_url_param('cio',id,'comma_separated_string','add');
+								}
+							});
+							
+							ajax_updates = ['stories','top_recent_stories','tags','producers'];
+							update_page();
+							update_history(event);
+						});
+					});
+				</script>

@@ -1,0 +1,305 @@
+<?php $identity = Zend_Auth::getInstance()->getIdentity(); ?>
+
+<script type="text/javascript">
+    
+    var story_list_params = {};
+    
+    story_list_params['language'] = {type:'select',model: 'Language',method: 'getLanguages',name: 'language',selected: '<?php echo @$this->form['language']; ?>'};
+    //story_list_params['organisation-type'] = {type:'select',model: 'Organisation',method: 'getOrganisationTypes',name: 'organisation_type',selected: '<?php //echo @$this->form['organisation_type']; ?>'};
+    story_list_params['producer'] = {type:'select',model: 'Producer',method: 'getProducers',name: 'producer',selected: '<?php echo @$this->form['producer']; ?>'};
+    story_list_params['media-type'] = {type:'select',model: 'Media',method: 'getMedias',name: 'media',selected: '<?php echo @$this->form['media']; ?>'};
+    story_list_params['category'] = {type:'select',model: 'Category',method: 'getCategories',name: 'category',selected: '<?php echo @$this->form['category']; ?>'};
+    story_list_params['location'] = {type:'select',model: 'Location',method: 'getLocations',name: 'location',selected: '<?php echo @$this->form['location']; ?>','onComplete': 'location_change'};
+    story_list_params['tag'] = {type:'tags',selected: eval(<?php echo Zend_Json::encode(explode(";",@$this->form['tags'])); ?>)};
+
+</script>
+
+<div id="content_page" class="page_wrapper">
+    <div class="content_inner">
+        <h2><?php echo ($this->form['id'] > 0) ? $this->i18n->t($this->form['type'].'.edit') : $this->i18n->t($this->form['type'].'.add'); ?></h2>
+        <div class="content_form">
+            <form name="<?php echo $this->form['type']; ?>" action="<?php echo $this->url(array('story_id' => $this->form['id']),'story_save',true,false); ?>" method="POST">
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.language'); ?>:</div>
+                <div id="language" class="form_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.date'); ?>:</div>
+                <div class="form_value"><input type="text" name="date" value ="<?php echo @$this->form['date']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.duration'); ?>:</div>
+                <div class="form_value"><input type="text" name="duration" value ="<?php echo @$this->form['duration']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <hr />
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.title'); ?>:</div>
+                <div class="form_value"><input type="text" name="name" value ="<?php echo htmlentities(@$this->form['name']); ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.url_title'); ?>:</div>
+                <div class="form_value"><input type="text" name="url_title" value="<?php echo @$this->form['url_title']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.thumbnail'); ?>:</div>
+                <div class="form_value">
+                    <?php 
+                        $uploads_folder = '/uploads/story'; 
+                        $thumbnail_size = explode("x",$this->i18n->t('image.story_thumbnail_size'));
+                        $thumbnail_exists = (@$this->form['thumbnail'] != '' && file_exists(ROOT_PATH.'/public'.$uploads_folder.'/'.$this->form['thumbnail'])) ? true : false;
+                    ?>
+                    <div id="thumbnailPreview">
+                        <img width="<?php echo $thumbnail_size[0]; ?>" alt="<?php echo @$this->form['title']; ?>" title="<?php echo @$this->form['title']; ?>" src="<?php echo @$uploads_folder.'/'.$this->form['thumbnail']; ?>"<?php echo ($thumbnail_exists) ? '' : ' style="display:none"'; ?> />
+                        <?php echo ($thumbnail_exists) ? '<br /><input class="checkbox nomargin" type="checkbox" name="no_thumbnail" value="1" /> '.$this->i18n->t('form.no_thumbnail') : ''; ?>
+                    </div>
+                    <input id="thumbnail" type="file" value="" />
+                    <input type="hidden" name="thumbnail" value="<?php echo @$this->form['thumbnail']; ?>" />
+                </div>
+                <div class="clear"></div>
+            </div> 
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.description'); ?>:</div>
+                <div class="form_value"><textarea rows="10" name="description"><?php echo @$this->form['description']; ?></textarea></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.meta_description'); ?>:</div>
+                <div class="form_value"><textarea rows="3" name="meta_description"><?php echo @$this->form['meta_description']; ?></textarea></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.keywords'); ?>:</div>
+                <div class="form_value"><textarea rows="5" name="keywords"><?php echo @$this->form['keywords']; ?></textarea></div>
+                <div class="clear"></div>
+            </div>   
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.state'); ?>:</div>
+                <div class="form_value">
+                    <input style="margin-right: 15px" class="radio" type="radio" name="state" value="1"<?php echo (!isset($this->form['state']) || @$this->form['state'] == 1) ? ' checked="checked"' : ''; ?> /><?php echo $this->i18n->t('form.state_active'); ?>
+                    <input style="margin: 0 15px" class="radio" type="radio" name="state" value="0"<?php echo (isset($this->form['state']) && @$this->form['state'] == 0) ? ' checked="checked"' : ''; ?> /><?php echo $this->i18n->t('form.state_not_active'); ?>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.adult_content'); ?>:</div>
+                <div class="form_value">
+                    <input style="margin-right: 15px" class="radio" type="radio" name="adult_content" value="1"<?php echo (isset($this->form['adult_content']) && @$this->form['adult_content'] == 1) ? ' checked="checked"' : ''; ?> /><?php echo $this->i18n->t('form.yes'); ?>
+                    <input style="margin: 0 15px" class="radio" type="radio" name="adult_content" value="0"<?php echo (!isset($this->form['adult_content']) || @$this->form['adult_content'] == 0) ? ' checked="checked"' : ''; ?> /><?php echo $this->i18n->t('form.no'); ?>
+                </div>
+                <div class="clear"></div>
+            </div> 
+            <hr />
+            <!-- 
+            <div class="form_row">
+                <div class="form_label"><?php //echo $this->i18n->t('content.type_organisation-type'); ?>:</div>
+                <div id="organisation-type" class="form_value"></div>
+                <div class="form_additional">
+                    <a class="add_button fancybox" href="<?php //echo $this->url(array('content_type' => 'organisation-type','content_action' => 'edit','params' => http_build_query(array('fancybox' => 1))),'admin_content',true,false); ?>"><?php //echo $this->i18n->t('organisation-type.add'); ?></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            -->
+            <?php if ($identity->producer == 0): ?>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('content.type_producer'); ?>:</div>
+                <div id="producer" class="form_value"></div>
+                <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_producer_edit')): ?>
+                <div class="form_additional">
+                    <a class="btn primary larg fancybox" href="<?php echo $this->url(array('content_type' => 'producer','content_action' => 'edit','params' => http_build_query(array('fancybox' => 1))),'admin_content',true,false); ?>"><?php echo $this->i18n->t('producer.add'); ?></a>
+                </div>
+                <?php endif; ?>
+                <div class="clear"></div>
+            </div>
+            <?php endif; ?>   
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('content.type_media-type'); ?>:</div>
+                <div id="media-type" class="form_value"></div>
+                <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_media-type_edit')): ?>
+                <div class="form_additional">
+                    <a class="btn primary larg fancybox" href="<?php echo $this->url(array('content_type' => 'media-type','content_action' => 'edit','params' => http_build_query(array('fancybox' => 1))),'admin_content',true,false); ?>"><?php echo $this->i18n->t('media-type.add'); ?></a>
+                </div>
+                <?php endif; ?>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.source_url'); ?>:</div>
+                <div class="form_value"><input type="text" name="media_source_url" value ="<?php echo @$this->form['media_source_url']; ?>" /></div>
+                <div class="clear"></div>
+            </div> 
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.content_url'); ?>:</div>
+                <div class="form_value"><textarea rows="5" name="media_content_url"><?php echo @$this->form['media_content_url']; ?></textarea></div>
+                <div class="clear"></div>
+            </div>  
+            <hr />
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('content.type_category'); ?>:</div>
+                <div id="category" class="form_value"></div>
+                <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_category_edit')): ?>
+                <div class="form_additional">
+                    <a class="btn primary larg fancybox" href="<?php echo $this->url(array('content_type' => 'category','content_action' => 'edit','params' => http_build_query(array('fancybox' => 1))),'admin_content',true,false); ?>"><?php echo $this->i18n->t('category.add'); ?></a>
+                </div>
+                <?php endif; ?>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.tags'); ?>:</div>
+                <div id="tag" class="form_value"></div>
+                <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_tag_edit')): ?>
+                <div class="form_additional">
+                    <a class="btn primary larg fancybox" href="<?php echo $this->url(array('content_type' => 'tag','content_action' => 'edit','params' => http_build_query(array('fancybox' => 1))),'admin_content',true,false); ?>"><?php echo $this->i18n->t('tag.add'); ?></a>
+                </div>
+                <?php endif; ?>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.hashtag'); ?>:</div>
+                <div class="form_value"><input type="text" name="hashtags" value ="<?php echo @$this->form['hashtags']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <hr />
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('content.type_location'); ?>:</div>
+                <div id="location" class="form_value"></div>
+                <?php if ($this->acl->isAllowed($identity->user_type,NULL,'content_location_edit')): ?>
+                <div class="form_additional">
+                    <a class="btn primary larg fancybox" href="<?php echo $this->url(array('content_type' => 'location','content_action' => 'edit','params' => http_build_query(array('fancybox' => 1))),'admin_content',true,false); ?>"><?php echo $this->i18n->t('location.add'); ?></a>
+                </div>
+                <?php endif; ?>
+                <div class="clear"></div>
+            </div> 
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.geolocation'); ?>:</div>
+                <div class="form_value">
+                    <div id="geolocation"></div>
+                    <script type="text/javascript">
+                    	var map;
+                    	var gmap_markers = <?php echo Zend_Json::encode($this->form['geolocations']); ?>;
+                    </script>
+                    <?php $i = 0; ?>
+                    <?php foreach ($this->form['geolocations'] as $geolocation): ?>
+                    <input id="geolocation_<?php echo $i; ?>" class="geolocation_hidden" name="geolocation[<?php echo $i; ?>]" value="<?php echo $geolocation; ?>" type="hidden" />
+                	<?php $i++; endforeach; ?>
+                </div>
+                <div class="form_additional">
+                    <a id="add_point" class="btn primary larg"><?php echo $this->i18n->t('point.add'); ?></a>
+                    <div id="points_delete_info">
+                    	<p align="justify"><?php echo $this->i18n->t('point.delete.info'); ?></p>
+                    	<input id="points_delete_mode" class="checkbox" type="checkbox" value="" />
+                    	<?php echo $this->i18n->t('point.delete.mode'); ?>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <hr />
+            <div class="form_row submit_row">
+                <div class="form_submit"><a class="btn primary large story_submit_button"><?php echo $this->i18n->t('form.save'); ?></a></div>
+                <?php if (!($this->form['id'] > 0)): ?>
+                <div class="form_submit"><a class="btn primary large story_submit_button add_another"><?php echo $this->i18n->t('form.save_and_add_another'); ?></a></div>
+                <?php endif; ?>
+                <div class="form_validate_error"></div>
+                <div class="clear"></div>     
+            </div>
+            <input type="hidden" id="redirect_url" name="redirect_url" value="" />
+            </form>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    var generate_location_string_url = '<?php echo $this->url(array('action' => 'generate-location-string','controller' => 'ajax'),'action',true,false); ?>';
+    
+    $(document).ready(function(){
+
+        $("input[name=date]").mask('9999-99-99');
+        $("input[name=duration]").mask('99:99');
+        
+        var name_keyup_handler = function(){
+            $(this).unbind('keyup');
+
+            var title = $(this).val();
+            $.ajax({
+                url: '<?php echo $this->url(array('action' => 'generate-url','controller' => 'ajax'),'action',true,false); ?>',
+                data: {title: title},
+                success: function(data){
+                    $("input[name=url_title]").val(data);
+                }
+            });
+
+            $(this).bind('keyup',name_keyup_handler);
+        };
+        $("input[name=name]").bind('keyup',name_keyup_handler);
+    
+    
+        $("#thumbnail").uploadify({
+            'uploader'  : '/uploadify/uploadify.swf',
+            'expressInstall' : '/uploadify/expressInstall.swf',
+            'script'    : '/uploadify/uploadify.php',
+            'cancelImg' : '/uploadify/cancel.png',
+            'buttonText': '<?php echo $this->i18n->t('uploadify.select_image'); ?>',
+            'folder'    : '/public<?php echo $uploads_folder; ?>',
+            'fileExt'   : '*.jpg;*.jpeg;*.png;*.gif',
+            'fileDesc'  : '*.jpg;*.jpeg;*.png;*.gif',
+            'multi'     : false,
+            'auto'      : true,
+            'onComplete': function(event, ID, fileObj, response, data) {
+                $("input[name=thumbnail]").val(response);
+                var thumbnail = '<?php echo $uploads_folder; ?>/'+response;
+
+                $.ajax({
+					url: '<?php echo $this->url(array('action' => 'resize-image'),'admin',true,false); ?>',
+					data: {image: thumbnail,width: '<?php echo $thumbnail_size[0]; ?>',height: '<?php echo $thumbnail_size[1]; ?>'},
+					success: function(data){
+						var preview_img = $("#thumbnailPreview").find('img');
+						preview_img.attr('src',data);
+		                preview_img.show();
+					}
+                });
+            }
+        });  
+
+        $.each(story_list_params,function(k,v){
+            generate_list('<?php echo $this->url(array('action' => 'generate-list','controller' => 'ajax'),'action',true,false); ?>',k,v);
+        });
+        
+        $(".fancybox").fancybox({hideOnOverlayClick: false});
+
+        var story_form = $("form[name=<?php echo $this->form['type']; ?>]");
+        
+        var story_submit_button_hander = function(){
+			var this_button = $(this);
+			this_button.unbind('click');
+            var form_response = story_form.find('.form_validate_error');
+            var form_data = story_form.serialize();
+            
+            form_response.html('<div class="loading_small"></div>');
+
+            $("#redirect_url").val(($(this).hasClass('add_another')) ? '<?php echo $this->url(array('content_type' => $this->form['type'],'content_action' => 'edit'),'admin_content',true,false); ?>' : '<?php echo $this->url(array('content_type' => $this->form['type'],'content_action' => 'list'),'admin_content',true,false); ?>');
+
+            $.ajax({
+                url: '<?php echo $this->url(array('content_action' => 'validate','content_type' => $this->form['type']),'admin_content',true,false); ?>',
+                data: form_data,
+                success: function(data) {
+                		this_button.bind('click',story_submit_button_hander);
+                    $("#loading_small").hide();
+                    if (data == 1) {
+                        story_form.submit();
+                    }
+                    else {
+                        form_response.html(data);
+                    }
+                }
+            });
+        };
+        
+        story_form.find('.story_submit_button').bind('click',story_submit_button_hander);
+
+    });
+
+</script>

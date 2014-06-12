@@ -1,0 +1,22 @@
+														<?php 
+															@$tags = (trim($this->params['tags']) != '') ? explode(",",strtolower($this->params['tags'])) : array();
+															$divide_list = (((count($this->tags) - 1) % 2) != 0) ? ((int)((count($this->tags) - 1) / 2) + 1) : (int)((count($this->tags) - 1) / 2);
+															$i = 0;
+														?>
+														<ul>
+															<li>
+																<input id="tag-all" name="tags" type="checkbox" value="" class="story-all"<?php echo (count($tags) == 0) ? ' checked="checked"' : ''; ?> />
+																<label for="tag-all">all (<span class="now_showing_number_of_stories"><?php echo $this->counter['tags_stories']; ?></span>)</label>
+															</li>
+														<?php foreach ($this->tags as $tag): $i++; ?>
+															<li>
+																<input id="tag-<?php echo $tag['id']; ?>" name="tags" type="checkbox" value="<?php echo $tag['slug']; ?>"<?php echo (in_array($tag['slug'],$tags)) ? ' checked="checked"' : ''; ?> />
+																<label for="tag-<?php echo $tag['id']; ?>"><?php echo $tag['name'].(($tag['stories_count'] > 0) ? ' ('.$tag['stories_count'].')' : ''); ?></label>
+															</li>
+														<?php if ($i == $divide_list): ?>
+														</ul>
+														<ul>
+														<?php endif; ?>
+														<?php endforeach; ?>
+														</ul>
+<?php if (@$this->params['ajax'] !== false) {die();} ?>

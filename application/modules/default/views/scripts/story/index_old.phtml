@@ -1,0 +1,111 @@
+				<div id="story-info">
+				
+					<?php if ($this->producer['twitter_url'] != ''): ?>
+					<div id="story-twitter">
+						<a href="#" rel="external" class="twitter-follow">Follow</a>
+						<?php 
+							if (strpos($this->producer['twitter_url'],'http://') !== false || strpos($this->producer['twitter_url'],'https://') !== false) {
+								$twitter_parts = explode("/#!/",$this->producer['twitter_url']);
+								$twitter = '@'.end($twitter_parts);
+							}
+							else {
+								$twitter = $this->producer['twitter_url'];
+							}
+						?>
+						<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+						<script type="text/javascript">
+							//<![CDATA[
+								new TWTR.Widget({
+									version: 2,
+									type: 'search',
+									search: '<?php echo $twitter; ?>',
+									interval: 30000,
+									title: '',
+									subject: '<?php echo $twitter; ?>',
+									width: 291,
+									height: 300,
+									theme: {
+									shell: {
+										background: '#161616',
+										color: '#ffffff'
+									},
+									tweets: {
+										background: '#222222',
+										color: '#444444',
+										links: '#ffffff'
+									}
+									},
+									features: {
+									scrollbar: false,
+									loop: true,
+									live: false,
+									behavior: 'default'
+									}
+								}).render().start();
+							//]]>
+						</script>
+					</div>
+					<!-- /story-twitter -->
+					<?php endif; ?>
+					
+					<div id="story-details">
+						<h2>More on this story...</h2>
+						<a class="info" href="#">Information</a>
+						<article>
+							<h1><?php echo $this->story['name']; ?></h1>
+							<p><?php echo $this->story['description']; ?></p>
+							<span class="fig"></span>
+						</article>
+						<div class="informations">
+							<dl>
+								<?php if ($this->producer['url'] != ''): ?>
+								<dt>Site</dt>
+								<dd class="site">
+									<?php
+										$site = $this->producer['url'];
+										$site = ($site[strlen($site) - 1] == '/') ? substr($site,0,-1) : $site;
+										$site = preg_replace(array('/http:\/\//','/https:\/\//'),array('',''),$site);
+									?>
+									<a target="_blank" title="<?php echo $this->producer['name']; ?>" href="<?php echo $this->producer['url']; ?>"><?php echo $site; ?></a>
+								</dd>
+								<?php endif; ?>
+								<?php if ($this->producer['facebook_url'] != ''): ?>
+								<dt>Facebook</dt>
+								<dd class="facebook">
+									<?php
+										$facebook = $this->producer['facebook_url'];
+										$facebook = ($facebook[strlen($facebook) - 1] == '/') ? substr($facebook,0,-1) : $facebook;
+										$facebook = preg_replace(array('/http:\/\//','/https:\/\//'),array('',''),$facebook);
+									?>
+									<a target="_blank" title="<?php echo $this->producer['name']; ?>" href="<?php echo $this->producer['facebook_url']; ?>"><?php echo $facebook; ?></a>
+								</dd>
+								<?php endif; ?>
+								<?php if ($this->story['tags'] != ''): ?>
+								<dt>Tags</dt>
+								<dd class="tags"><?php echo str_replace(',',', ',$this->story['tags']); ?></dd>
+								<?php endif; ?>
+							</dl>
+							<a class="report" href="#">Report broken story?</a>
+						</div>
+					</div>
+					<!-- /story-details -->
+				</div>
+				
+<!--<select name="SeriesCode">
+    <option value=""></option>
+    <?php //foreach ($this->series as $series): ?>
+    <option value="<?php //echo $this->url(array('story_id' => $this->story_id,'SeriesCode' => $series['SeriesCode']),'story',true,false); ?>"<?php //echo ($this->SeriesCode == $series['SeriesCode']) ? ' selected="selected"': ''; ?>><?php //echo $series['Series Name']; ?></option>
+    <?php //endforeach; ?>
+</select>
+
+<?php //if (isset($this->chart)): ?>
+<img src="<?php //echo $this->chart; ?>" />
+<?php //endif; ?>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("select[name=SeriesCode]").bind('change',function(){
+            location.href = $(this).val();
+        });
+    });
+</script>-->

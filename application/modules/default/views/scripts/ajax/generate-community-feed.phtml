@@ -1,0 +1,47 @@
+<div class="user-messages">
+<ul>
+	<?php foreach ($this->community_feeds as $community_feed): ?>
+		<li<?php echo ($this->fb_user_id == $community_feed['fb_user_id']) ? ' class="message-own"' : ''; ?>>
+		<div>		
+			<a href="/story/<?php echo $community_feed['story_id'] ?>/">												
+				<figure>
+					<?php $avatar = 'https://graph.facebook.com/'.$community_feed['fb_user_id'].'/picture'; ?>
+					<script type="text/javascript">
+					
+						if (typeof images_loading['<?php echo $community_feed['fb_user_id']; ?>'] == 'undefined') {
+							images_loading['<?php echo $community_feed['fb_user_id']; ?>'] = new Image();
+							images_loading['<?php echo $community_feed['fb_user_id']; ?>'].src = '<?php echo $avatar; ?>';
+						}
+						
+					</script>
+					<img width="39" src="<?php echo $avatar; ?>" alt="" />
+					<span></span>
+				</figure>
+				<h4><?php echo (($this->fb_user_id == $community_feed['fb_user_id']) ? 'You' : $community_feed['first_name'].' '.$community_feed['last_name']).' '.$this->i18n->t('community_feed.'.$community_feed['action']); ?></h4>
+				<p><?php echo '"'.$community_feed['story_name'].'"'?></p>
+				<p class="published">
+					<?php 
+						$dhms = App_Helper::_secondsToDhms(time() - strtotime($community_feed['date'])); 
+						if ($dhms['day'] > 0) {
+                			echo $dhms['day'].' '.(($dhms['day'] > 1) ? $this->i18n->t('title.days') : $this->i18n->t('title.day'));
+                        }
+                        elseif ($dhms['hour'] > 0) {
+                    		echo $dhms['hour'].' '.(($dhms['hour'] > 1) ? $this->i18n->t('title.hours') : $this->i18n->t('title.hour'));
+                        }
+                        elseif ($dhms['minute'] > 0) {
+                        	echo $dhms['minute'].' '.(($dhms['minute'] > 1) ? $this->i18n->t('title.minutes') : $this->i18n->t('title.minute'));
+                        }
+                        else {
+                        	echo $dhms['second'].' '.(($dhms['second'] > 1) ? $this->i18n->t('title.seconds') : $this->i18n->t('title.second'));
+                        }
+                        echo ' '.$this->i18n->t('log.ago');
+					?>
+				</p>
+				<span class="fig"></span>
+			</a>
+		</div>
+		</li>
+	<?php endforeach; ?>
+</ul>
+</div>
+<?php die(); ?>

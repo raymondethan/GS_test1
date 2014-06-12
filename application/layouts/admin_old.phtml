@@ -1,0 +1,33 @@
+<?php header("Content-type: text/html; charset=UTF-8"); ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title><?php echo $this->page_title.' - '.$this->i18n->t('application.name'); ?></title>
+        <?php echo $this->headLink(); ?>
+        <?php echo $this->headScript(); ?>
+    </head>
+    <body>
+        <div id="main_wrapper">
+            <?php if (Zend_Auth::getInstance()->hasIdentity()): ?>
+            <div id="top_navigation">
+                <div id="left_side"><div id="logo"></div></div>
+                <div id="main_menu"><?php echo $this->action('menu','home','default',array('type' => 'admin','set_active' => $this->menu_set_active)); ?></div>
+                <div id="right_side">
+                    <a title="<?php echo $this->i18n->t('menu.dashboard'); ?>" href="<?php echo $this->url(array('action' => 'dashboard'),'admin',true,false); ?>"><?php echo $this->i18n->t('menu.dashboard'); ?></a>
+                    &nbsp;|&nbsp;
+                    <a title="<?php echo $this->i18n->t('user.logout'); ?>" href="<?php echo $this->url(array('action' => 'logout','controller' => 'user'),'action',true,false); ?>"><?php echo $this->i18n->t('user.logout').' ('.ucfirst(Zend_Auth::getInstance()->getIdentity()->first_name).')'; ?></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <?php endif; ?>
+            <div id="page_headers">
+                <div class="page_title"><?php echo $this->placeholder('breadcrumbs').$this->page_title; ?></div>
+                <div class="rightside_bar"><a title="<?php echo $this->i18n->t('admin.back_to_website'); ?>" href="<?php echo $this->url(array(),'default',true,false)?>"><?php echo $this->i18n->t('admin.back_to_website'); ?></a></div>
+                <div class="clear"></div>
+            </div>
+
+            <?php echo $this->layout()->content; ?>
+            <div id="bottom_navigation"><a title="<?php echo $this->i18n->t('admin.system_tools'); ?>" href="<?php echo $this->url(array('action' => 'system-tools'),'admin',true,false); ?>"><?php echo $this->i18n->t('admin.system_tools'); ?></a></div>
+        </div>
+    </body>
+</html> 

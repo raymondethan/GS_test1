@@ -1,0 +1,444 @@
+<?php header("Content-type: text/html; charset=UTF-8"); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+	<head>
+		<?php echo $this->render('blocks/head.phtml'); ?>
+	</head>
+	<body>
+		<?php echo $this->render('blocks/facebook.phtml'); ?>
+		<div id="page">
+			<?php echo $this->render('blocks/header.phtml'); ?>
+			<hr />
+			<div id="content">
+				<?php $user = Zend_Registry::get('user'); ?>
+				<div id="stories-filter">
+
+					<div id="toolbar" class="toolbar-expanded">
+
+						<ul class="tabs">
+							<?php if (count($user) > 0): ?>
+							<li>
+								<a href="#toolbar-facebook" class="facebook">
+									<img width="39" src="https://graph.facebook.com/<?php echo $user['fb_user_id']; ?>/picture" alt="" />
+								</a>
+							</li>
+							<?php else: ?>
+							<li>
+								<a href="#toolbar-facebook" class="facebook">Facebook</a>
+							</li>
+							<?php endif; ?>
+							<li>
+								<a href="#toolbar-filters" class="filters">Filter stories</a>
+							</li>
+							<li>
+								<a href="#toolbar-stats" class="stats">Stats</a>
+							</li>
+						</ul>
+
+						<div id="toolbar-facebook" class="facebook-signout">
+						
+							<?php if (count($user) > 0): ?>
+							<div id="user-info" class="vcard">
+								<div class="avatar">
+									<img width="70" src="https://graph.facebook.com/<?php echo $user['fb_user_id']; ?>/picture" alt="" />
+									<span></span>
+								</div>
+								<h2><?php echo $user['first_name'].' '.$user['last_name']; ?></h2>
+								<dl>
+									<dt>Member since</dt>
+									<dd><?php echo date("Y",strtotime($user['date_created'])); ?></dd>
+									<dt>SHARED</dt>
+									<dd><?php echo $user['shared_stories_count']; ?> STORIES</dd>
+								</dl>
+							</div>
+
+							<div id="user-messages">	
+								<h3>Community Feed</h3>
+								<div class="section">
+									<ul>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/1.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Dave Macdonald shared</h4>
+												<p>"OBAMA’S SPEACH ON AID"</p>
+												<p class="published">1 day ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li class="message-own">
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/2.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>You shared</h4>
+												<p>"amazon pictures"</p>
+												<p class="published">1 day ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/3.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Kate Clague shared </h4>
+												<p>"amazon pictures"</p>
+												<p class="published">2 days ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/4.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Chris Macdonald shared</h4>
+												<p>"obama’s speach on aid"</p>
+												<p class="published">3 days ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/1.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Sarah Clague shared</h4>
+												<p>"amazon pictures"</p>
+												<p class="published">4 days ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/1.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Dave Macdonald shared</h4>
+												<p>"OBAMA’S SPEACH ON AID"</p>
+												<p class="published">1 day ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li class="message-own">
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/2.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>You shared</h4>
+												<p>"amazon pictures"</p>
+												<p class="published">1 day ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/3.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Kate Clague shared </h4>
+												<p>"amazon pictures"</p>
+												<p class="published">2 days ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/4.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Chris Macdonald shared</h4>
+												<p>"obama’s speach on aid"</p>
+												<p class="published">3 days ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<figure>
+													<img src="/images/avatars/1.jpg" alt="" />
+													<span></span>
+												</figure>
+												<h4>Sarah Clague shared</h4>
+												<p>"amazon pictures"</p>
+												<p class="published">4 days ago</p>
+												<span class="fig"></span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<?php else: ?>
+							<div class="section">
+								<p>Connect with facebook and you can share the global stories your passionate
+								about with your friends.</p>	
+								<p class="note">Click below to get started.</p>
+								<span class="fig"></span>
+							</div>
+
+							<div class="section">
+								<a href="#" id="facebook-login">Connect with Facebook</a>
+							</div>
+							<?php endif; ?>
+							
+						</div>
+						<!-- /toolbar-facebook -->
+					
+						<form action="#" id="toolbar-filters" method="get">
+							<fieldset id="filter-tags-producers">
+
+								<ul class="tabs">
+									<li><a class="tags" href="#filter-tags">Tags</a></li>
+									<li><a class="producers" href="#filter-producers">Producers</a></li>
+								</ul>
+
+								<fieldset id="filter-tags">
+									<div class="wrapper">
+										<ul>
+											<li>
+												<label><?php echo 'all'.(($this->stories_count > 0) ? ' ('.$this->stories_count.')' : ''); ?></label>
+												<input checked="checked" name="tags" type="checkbox" value="" />
+											</li>
+										<?php 
+											$divide_list = (((count($this->tags) - 1) % 2) != 0) ? ((int)((count($this->tags) - 1) / 2) + 1) : (int)((count($this->tags) - 1) / 2);
+											$i = 0; 
+										?>
+										<?php foreach ($this->tags as $tag): $i++; ?>
+											<li>
+												<label><?php echo $tag['name'].(($tag['stories_count'] > 0) ? ' ('.$tag['stories_count'].')' : ''); ?></label>
+												<input checked="checked" name="tags" type="checkbox" value="" />
+											</li>
+										<?php if ($i == $divide_list): ?>
+										</ul>
+										<ul>
+										<?php endif; ?>
+										<?php endforeach; ?>
+										</ul>
+									</div>
+								</fieldset>
+								<!-- /filter-tags -->
+
+								<fieldset id="filter-producers">
+									<div class="wrapper">
+										<ul>
+											<li>
+												<label><?php echo 'all'.(($this->stories_count > 0) ? ' ('.$this->stories_count.')' : ''); ?></label>
+												<input checked="checked" name="tags" type="checkbox" value="" />
+											</li>
+											<?php $i = 0; ?>
+											<?php foreach ($this->producers as $producer): $i += $producer['stories_count']; ?>
+											<li>
+												<label><?php echo $producer['name'].(($producer['stories_count'] > 0) ? ' ('.$producer['stories_count'].')' : ''); ?></label>
+												<input checked="checked" name="tags" type="checkbox" value="" />
+											</li>
+											<?php endforeach; ?>
+										</ul>
+									</div>
+								</fieldset>
+								<!-- / filter-producers -->
+								
+							</fieldset>
+							<!-- / filter-tags-producers -->
+				
+							<fieldset id="filter-corp">
+								<h2>Story corp</h2>
+								<ul>
+									<li>
+										<label>NGO</label>
+										<input name="corp" type="radio" checked="checked"/>
+									</li>
+									<li>
+										<label>CORP</label>
+										<input name="corp" type="radio" />
+									</li>
+									<li>
+										<label>IND</label>
+										<input name="corp" type="radio" />
+									</li>
+								</ul>
+							</fieldset>
+							<!-- /filter-corp -->
+							
+							<fieldset id="filter-properties">
+								<h2>Story properties</h2>
+
+								<fieldset id="filter-format">
+									<h3>Story format</h3>
+									<ul>
+										<li class="format-video">
+											<label>Video</label>
+											<input name="story-format" type="checkbox" value="video" checked="checked"/>
+										</li>
+										<li class="format-photo">
+											<label>Photo</label>
+											<input name="story-format" type="checkbox" value="photo" checked="checked"/>
+										</li>
+										<li class="format-audio">
+											<label>Audio</label>
+											<input name="story-format" type="checkbox" value="audio" checked="checked"/>
+										</li>
+										<li class="format-interact">
+											<label>Interact</label>
+											<input name="story-format" type="checkbox" value="interact"/>
+										</li>
+									</ul>
+								</fieldset>
+								<!-- /filter-format -->
+								
+								<fieldset id="filter-duration">
+									<h3>Duration</h3>
+									<ul>
+										<li>
+											<label>All</label>
+											<input name="duration" type="radio" value="all" checked="checked"/>
+										</li>
+										<li>
+											<label>0-3min</label>
+											<input name="duration" type="radio" value="" />
+										</li>
+										<li>
+											<label>3-10min</label>
+											<input name="duration" type="radio" value="" />
+										</li>
+										<li>
+											<label>10+min</label>
+											<input name="duration" type="radio" value="" />
+										</li>
+									</ul>
+								</fieldset>
+								<!-- /flilter-duration -->
+							</fieldset>
+							<!-- / story properties -->
+
+							<fieldset id="filter-adult">
+								<h3>Adult content</h3>
+								<ul>
+									<li>
+										<label>On</label>
+										<input name="adult" type="radio" value="1" checked="checked"/>
+									</li>
+									<li>
+										<label>Off</label>
+										<input name="adult" type="radio" value="0" />
+									</li>
+								</ul>
+							</fieldset>
+							<!-- /filter-adult -->
+
+							<!-- Filter dates -->
+							<fieldset class="section" id="filter-dates" data-min="1945" data-max="2011">
+								<h3>Dates</h3>
+								<label>From</label>
+								<input type="text" name="date-from" value="1960" class="date-year-from"/>
+								<label>To</label>
+								<input type="text" name="date-from" value="2000" class="date-year-to"/>
+							</fieldset>
+							<!-- / filter-dates -->
+
+							<fieldset id="filter-search">
+								<label>Search</label>
+								<input name="search" placeholder="SEARCH STORIES" type="text" />
+							</fieldset>
+							<!-- / filter-search -->
+						</form>
+						<!-- /filters -->
+
+						<div id="toolbar-stats">
+							
+							<form action="#" method="post" id="stats-chooser">
+								<fieldset>
+									<label>Select statistics</label>
+									<select>
+										<option selected="selected">Total Forest Area (1,000sq km 2005)</option>
+										<option>something</option>
+										<option>advertising</option>
+										<option>Ajax </option>
+										<option>Android </option>
+										<option>animations </option>
+										<option>apps </option>
+										<option>art </option>
+										<option>ASCII </option>
+										<option>backgrounds </option>
+										<option>badges </option>
+										<option>beauty </option>
+										<option>best of</option>
+										<option>blogging</option>
+										<option>books</option>
+										<option>branding</option>
+										<option>browsers</option>
+										<option>brushes</option>
+										<option>business</option>
+										<option>buttons</option>
+										<option>calendars</option>
+										<option>cartoons</option>
+										<option>cheat sheets</option>
+										<option>Christmas</option>
+										<option>clients</option>
+										<option>Coding</option>
+										<option>colors</option>
+										<option>something</option>
+										<option>advertising</option>
+										<option>Ajax </option>
+										<option>Android </option>
+										<option>animations </option>
+										<option>apps </option>
+										<option>art </option>
+										<option>ASCII </option>
+										<option>backgrounds </option>
+										<option>badges </option>
+										<option>beauty </option>
+										<option>best of</option>
+										<option>blogging</option>
+										<option>books</option>
+										<option>branding</option>
+										<option>browsers</option>
+										<option>brushes</option>
+										<option>business</option>
+										<option>buttons</option>
+										<option>calendars</option>
+										<option>cartoons</option>
+										<option>cheat sheets</option>
+										<option>Christmas</option>
+										<option>clients</option>
+										<option>Coding</option>
+										<option>colors</option>
+									</select>
+								</fieldset>
+							</form>
+							<!-- /stats-chooser -->
+
+							<div id="stats-info">
+								<img src="/images/stats.png" alt="" />
+							</div>
+							<!-- /stats-info -->
+						
+						</div>
+						<!-- /toolbar-stats -->
+
+					</div>
+					<!-- /story-toolbar -->
+					
+					<div id="map">
+						<img src="/images/map_placeholder.jpg" />
+					</div>
+					<p id="filter-info">
+						Now showing <?php echo $this->stories_count; ?> of <?php echo $this->stories_count; ?> stories in world view
+					</p>
+				</div>
+				<?php echo $this->render('blocks/bottom_stories.phtml'); ?>
+			</div>
+			<?php echo $this->render('blocks/footer.phtml'); ?>
+		</div>
+	</body>
+</html>

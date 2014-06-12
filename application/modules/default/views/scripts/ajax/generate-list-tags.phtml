@@ -1,0 +1,12 @@
+<select class="tags_select" name="tags[]" multiple="multiple">
+<?php foreach ($this->result as $res): ?>
+	<option value="<?php echo $res['slug']; ?>"<?php echo (in_array($res['slug'],$this->params['selected'])) ? ' selected="selected"' : ''; ?>><?php echo $res['name']; ?></option>
+<?php endforeach; ?>
+</select>
+<?php //foreach ($this->result as $res): ?>
+<!-- <div class="one_tag">
+    <input class="checkbox nomargin" type="checkbox" name="tags[<?php echo $res['id']; ?>]" value="<?php echo $res['name']; ?>"<?php echo (in_array($res['name'],$this->params['selected'])) ? ' checked="checked"' : ''; ?> /><?php echo $res['name']; ?>
+</div>
+<?php //endforeach; ?>
+<div class="clear"></div>  -->
+<?php die(); ?>

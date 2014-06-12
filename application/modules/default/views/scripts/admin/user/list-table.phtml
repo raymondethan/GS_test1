@@ -1,0 +1,23 @@
+       		<form name="list_form" action="" method="POST">
+       		<table class="bordered-table zebra-striped">
+				<thead>
+					<tr id="table_headers">
+		       			<th><input id="check_all" class="nomargin" type="checkbox" name="check_all" value="" /></th>
+		       			<th id="order_name" class="order_cell header"><?php echo $this->i18n->t('form.name'); ?></th>
+		       			<th id="order_username" class="order_cell header"><?php echo $this->i18n->t('user.username'); ?></th>
+		       			<th id="order_user_type" class="order_cell header"><?php echo $this->i18n->t('user.user_type'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+       				<?php foreach ($this->user_admins as $user_admin): ?>
+	          		<tr>
+	          			<td><input class="nomargin check_list" type="checkbox" name="check_list[<?php echo $user_admin['id']; ?>]" value="" /></td>
+	          			<td><a href="<?php echo $this->url(array('content_action' => 'edit','content_type' => 'user','params' => http_build_query(array('id' => $user_admin['id']))),'admin_content',true,false); ?>"><?php echo $user_admin['name']; ?></a></td>
+	          			<td><?php echo $user_admin['username']; ?></td>
+	          			<td><?php echo $this->i18n->t('user_type.'.$user_admin['user_type_name']); ?></td>     				
+	          		</tr>
+          			<?php endforeach; ?>
+          		</tbody>
+          	</table>
+       		</form>
+       		<?php echo $this->paginationControl($this->user_admins, 'Sliding', 'pagination-ajax.phtml',array('i18n' => $this->i18n,'callback' => 'load_list_table')); ?>

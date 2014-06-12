@@ -1,0 +1,84 @@
+<div id="content_page" class="page_wrapper">
+    <div class="content_inner">
+        <h2><?php echo ($this->form['id'] > 0) ? $this->i18n->t($this->form['type'].'.edit') : $this->i18n->t($this->form['type'].'.add'); ?></h2>
+        <div class="content_form">
+            <form name="<?php echo $this->form['type']; ?>" action="<?php echo $this->url(array('content_type' => $this->form['type'],'content_action' => 'save','params' => http_build_query($this->form['params'])),'admin_content',true,false); ?>" method="POST">
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.name'); ?>:</div>
+                <div class="form_value"><input type="text" name="name" value ="<?php echo htmlentities(@$this->form['name']); ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.url'); ?>:</div>
+                <div class="form_value"><input type="text" name="url" value ="<?php echo @$this->form['url']; ?>" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.image'); ?>:</div>
+                <div class="form_value">
+                    <?php 
+                        $uploads_folder = '/uploads/ad'; 
+                        $ad_size = explode("x",$this->i18n->t('image.story_ad_size'));
+                        $ad_exists = (@$this->form['image'] != '' && file_exists(ROOT_PATH.'/public'.$uploads_folder.'/'.$this->form['image'])) ? true : false;
+                    ?>
+                    <div id="imagePreview">
+                        <img width="<?php echo $ad_size[0]; ?>" alt="<?php echo @$this->form['name']; ?>" title="<?php echo @$this->form['name']; ?>" src="<?php echo @$uploads_folder.'/'.$this->form['image']; ?>"<?php echo ($ad_exists) ? '' : ' style="display:none"'; ?> />
+                    </div>
+                    <input id="image" type="file" value="" />
+                    <input type="hidden" name="image" value="<?php echo @$this->form['image']; ?>" />
+                </div>
+                <div class="clear"></div>
+            </div> 
+            <div class="form_row">
+                <div class="form_label"><?php echo $this->i18n->t('form.state'); ?>:</div>
+                <div class="form_value">
+                    <input style="margin-right: 15px" class="radio" type="radio" name="state" value="1"<?php echo (!isset($this->form['state']) || @$this->form['state'] == 1) ? ' checked="checked"' : ''; ?> /><?php echo $this->i18n->t('form.state_active'); ?>
+                    <input style="margin: 0 15px" class="radio" type="radio" name="state" value="0"<?php echo (isset($this->form['state']) && @$this->form['state'] == 0) ? ' checked="checked"' : ''; ?> /><?php echo $this->i18n->t('form.state_not_active'); ?>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form_row submit_row">
+                <div class="form_submit"><a class="btn primary large submit_button"><?php echo (@$this->form['id'] > 0) ? $this->i18n->t('form.save') : $this->i18n->t('form.add'); ?></a></div>
+                <div class="form_validate_error"></div>
+                <div class="clear"></div>     
+            </div>
+            <input type="hidden" name="id" value="<?php echo $this->form['id']; ?>" />
+            </form>
+        </div>    
+    </div>
+</div>
+<?php echo $this->render('admin/sumbit_button_handler.phtml'); ?>
+<script type="text/javascript">
+    
+    $(document).ready(function(){   
+    
+        $("#image").uploadify({
+            'uploader'  : '/uploadify/uploadify.swf',
+            'expressInstall' : '/uploadify/expressInstall.swf',
+            'script'    : '/uploadify/uploadify.php',
+            'cancelImg' : '/uploadify/cancel.png',
+            'buttonText': '<?php echo $this->i18n->t('uploadify.select_image'); ?>',
+            'folder'    : '/public<?php echo $uploads_folder; ?>',
+            'fileExt'   : '*.jpg;*.jpeg;*.png;*.gif',
+            'fileDesc'  : '*.jpg;*.jpeg;*.png;*.gif',
+            'multi'     : false,
+            'auto'      : true,
+            'onComplete': function(event, ID, fileObj, response, data) {
+                $("input[name=image]").val(response);
+                var image = '<?php echo $uploads_folder; ?>/'+response;
+
+                $.ajax({
+					url: '<?php echo $this->url(array('action' => 'resize-image'),'admin',true,false); ?>',
+					data: {image: image,width: '<?php echo $ad_size[0]; ?>',height: '<?php echo $ad_size[1]; ?>'},
+					success: function(data){
+						var preview_img = $("#imagePreview").find('img');
+						preview_img.attr('src',data);
+		                preview_img.show();
+					}
+                });
+            }
+        }); 
+        
+    }); 
+
+</script>

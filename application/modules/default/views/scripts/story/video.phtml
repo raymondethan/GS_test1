@@ -1,0 +1,4 @@
+<div class="story-preview preview-video"> 
+            <!-- <a class="story-preview-launch" href="http://www.youtube.com/watch?v=Vlwfq5A1skg">View this video on YouTube</a> --> 
+            <?php echo preg_replace(array('/width="+[0-9%]+"/i','/height="+[0-9%]+"/i'),array('width="100%"','height="100%"'),$this->story['media_content_url']); ?> 
+          </div> 

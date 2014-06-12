@@ -1,0 +1,64 @@
+<div id="content_page" class="page_wrapper fancybox_page are_you_sure_page">
+    <div class="content_inner">
+    	<h2><?php echo $this->i18n->t('title.you_are_trying_to').' '.strtolower($this->i18n->t('form.'.$this->content_action)).' '.strtolower($this->i18n->t('content.type_'.$this->content_type.'s')).':'; ?></h2>
+   		<div class="content_form">
+   			<div class="form_row">
+   				<ul id="are_you_sure_info"></ul>
+   			</div>
+   			<div class="form_row">
+   				<h2><?php echo $this->i18n->t('title.would_you_like_proceed'); ?></h2>
+   			</div>
+            <div class="form_row submit_row">
+                <div class="form_submit"><a id="no_button" class="btn primary large submit_button"><?php echo $this->i18n->t('form.no'); ?></a></div>
+                <div class="form_submit"><a id="yes_button" class="btn primary large submit_button"><?php echo $this->i18n->t('form.yes'); ?></a></div>
+                <div class="form_validate_error"></div>
+                <div class="clear"></div>     
+            </div>
+   		</div>
+    </div>
+</div>    
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#are_you_sure_info").html('<div class="loading_small"></div>');
+		
+        $.ajax({
+            url: '<?php echo $this->url(array('content_type' => $this->content_type,'content_action' => 'validate_delete'),'admin_content',true,false); ?>',
+            data: list_form_data,
+            success: function(data){
+            		$("#are_you_sure_info").html('');
+            		var info = eval('('+data+')');
+
+				$.each(info,function(k,v){
+					var one_item_html = '<li>'+v['name'];
+					if (typeof v['dependances'] != 'undefined') {
+						one_item_html += ' (<?php echo $this->i18n->t('delete.warning'); ?> '+v['dependances'].join(', ')+')';
+					}
+					one_item_html += '</li>';
+					$("#are_you_sure_info").append(one_item_html);
+				});
+            }
+        });
+
+        $(".are_you_sure_page .submit_button").bind('click',function(){
+            var agree = this.id.replace('_button','');
+            
+            if (agree == 'yes') {
+            	$.ajax({
+            		url: '<?php echo $this->url(array('content_type' => $this->content_type,'content_action' => $this->content_action),'admin_content',true,false); ?>',
+            		type: 'POST',
+                    data: list_form_data,
+                    success: function(data){
+                    	load_list_table();
+                    	$("#fancybox-close").trigger('click');
+                    }
+                });
+            }
+            else {
+            	$("#fancybox-close").trigger('click');
+            }
+        });
+
+	});
+</script>
+<?php die(); ?>

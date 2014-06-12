@@ -1,0 +1,176 @@
+/* Override some defaults */
+html, body {
+	background-color: #eee;
+}
+body {
+	padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+}
+a {cursor:pointer;}
+.container > footer p {
+	text-align: center; /* center align it with the container */
+}
+
+/* The white background content wrapper */
+.container > .content {
+	background-color: #fff;
+	padding: 20px;
+	margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+	-webkit-border-radius: 0 0 6px 6px;
+       -moz-border-radius: 0 0 6px 6px;
+            border-radius: 0 0 6px 6px;
+       -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+          -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+               box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+/* Page header tweaks */
+.page-header {
+	background-color: #f5f5f5;
+	padding: 20px 20px 10px;
+	margin: -20px -20px 20px;
+}
+
+/* Styles you shouldn't keep as they are for displaying this base example only */
+.content .span10 {
+	min-height: 500px;
+}
+
+#dashboard_buttons {text-align:center;}
+#dashboard_buttons a {margin:10px;}
+	  
+.topbar .btn {
+	border: 0;
+}
+
+#logo {
+    background: url(../images/logo.jpg) no-repeat;
+    width:202px;
+    height: 23px;
+}
+#flashMsgs {margin:5px 0; width:100%;}
+#flashMsgs div {
+	-webkit-border-radius: 6px;
+  	-moz-border-radius: 6px;
+  	border-radius: 6px;
+}
+#flashMsgs ul {margin:0; margin-left:25px; padding:15px;}
+.errorMsgs { background: #ffbaba; }
+.noticeMsgs { background: #dae2e8; border:2px solid #007ac2;}
+.successMsgs { background: #eaffd6; border:2px solid #9bde54;}
+
+.nomargin {
+    margin:0;
+}
+.hidden {
+    display:none;
+}
+.clear {
+    clear:both;
+}
+
+.form_row {}
+.form_label, .form_value, .form_additional {
+    float:left;
+    position: relative;
+    margin:5px 0;
+}
+.form_submit {
+    float:right;
+    margin:5px 15px;
+    margin-left:0;
+}
+.form_value input,
+.form_value select,
+.form_value textarea {
+    width:100%;
+}
+.form_value .radio,.form_value .checkbox {width:auto;}
+.form_validate_error {color:#B94A48; float: right; margin:15px; }
+
+#points_delete_info {
+	width:239px;
+}
+#points_delete_info .checkbox {margin: 0; margin-right: 15px;}
+
+.loading_small {
+    width:16px;
+    height:16px;
+    background: url(../images/loading_small.gif) no-repeat;   
+}
+#loading_line {
+	width:100%;
+	height:300px;
+	background: url(../images/loading_line.gif) top center no-repeat; 
+}
+
+#login_page {
+    width:700px;
+    margin:100px auto !important;
+    border:none;
+}
+#login_form {
+    width:700px;
+    height:235px;
+    font-size:36px;
+}
+#login_form .inner_content {
+    padding:30px;
+}
+#login_form .inner_content .form_label, #login_form .inner_content .form_value {
+    margin:10px 0;
+}
+#login_form .inner_content .form_label {
+    width:200px;
+}
+#login_form .inner_content .form_value {
+    width:440px;
+}
+#login_form .inner_content .form_value input {width:435px; height:35px; font-size: 22px;}
+#login_form .inner_content .form_value .form_password {font-size:44px;}
+#login_form .inner_content .form_value .remember_me {font-size:20px;}
+#login_form .inner_content .form_value .remember_me .checkbox {float:left; width:18px; height:18px; margin:0;}
+#login_form .inner_content .form_value .remember_me .form_label {width:auto; margin:0; margin-left:15px;}
+#login_form .inner_content .form_value .btn {float:right;}
+
+.content-table .row_name {float:left;}
+.content-table .row_links {float:right;}
+
+#content_page .search {float:left;}
+#content_page .with_selected {float:left; margin:1px 0 0 10px;}
+#content_page .add_item {float:right;}
+#content_page #list_table {margin-top:36px;}
+
+.pagination {
+    margin:0;
+    float:left;
+}
+.pagination a {
+    display: block;
+    float: left;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #000000;
+    background:#F5F5F5;
+	-webkit-border-radius: 6px;
+  	-moz-border-radius: 6px;
+  	border-radius: 6px;
+}
+.pagination a.current {background:#c7eefe;}
+.pagination_items_per_page {
+	float:right;
+}
+.pagination_items_per_page .form_label {margin-right:10px;}
+
+.content_form {margin: 20px 0;}
+.content_form .form_label,#story_form .form_additional {width:239px;}
+.content_form .form_value {width:640px; margin: 5px 20px;}
+.content_form .submit_row {width:913px;}
+.content_form #geolocation {width:100%; height:350px;}
+.fancybox_page .form_label {width:150px;}
+.fancybox_page .form_value {width:370px;}
+.fancybox_page .submit_row {width:100%;}
+.content_form .form_value .one_organisation_type {float: left; width:200px; margin: 8px; margin-left: 0;}
+.content_form .form_value .one_organisation_type .radio {margin: 0; margin-right: 15px;}
+.content_form .form_value .one_tag {float: left; width:120px; margin: 8px; margin-left: 0;}
+.content_form .form_value .tags_select {height:200px;}
+.content_form .form_value .one_tag .checkbox {margin-right: 15px;}

@@ -1,0 +1,21 @@
+       		<form name="list_form" action="" method="POST">
+       		<table class="bordered-table zebra-striped">
+				<thead>
+					<tr id="table_headers">
+		       			<th><input id="check_all" class="nomargin" type="checkbox" name="check_all" value="" /></th>
+		       			<th id="order_name" class="order_cell header"><?php echo $this->i18n->t('form.name'); ?></th>
+		       			<th id="order_stories_count" class="order_cell header"><?php echo $this->i18n->t('form.used_by').' ('.$this->i18n->t('content.type_storys').')'; ?></th>
+					</tr>
+				</thead>
+				<tbody>
+		            <?php foreach ($this->categories as $category): ?>
+		            <tr>
+		            		<td><input class="nomargin check_list" type="checkbox" name="check_list[<?php echo $category['id']; ?>]" value="" /></td>
+		            		<td><a href="<?php echo $this->url(array('content_action' => 'edit','content_type' => 'category','params' => http_build_query(array('id' => $category['id']))),'admin_content',true,false); ?>"><?php echo $category['name']; ?></a></td>
+		            		<td><a href="<?php echo $this->url(array('content_action' => 'list','content_type' => 'story','params' => http_build_query(array('category' => $category['id']))),'admin_content',true,false); ?>"><?php echo $category['stories_count']; ?></a></td>
+		            </tr>   
+		            <?php endforeach; ?>
+				</tbody>
+       		</table>
+       		</form>
+       		<?php echo $this->paginationControl($this->categories, 'Sliding', 'pagination-ajax.phtml',array('i18n' => $this->i18n,'callback' => 'load_list_table')); ?>

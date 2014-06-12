@@ -1,0 +1,30 @@
+<div id="login_page" class="page_wrapper">
+    <div id="login_form">
+        <form name="login_form" action="<?php echo $this->url(array('action' => 'login','controller' => 'user'),'action',true,false); ?>" method="POST">
+        <div class="inner_content">
+            <div class="form_label"><?php echo $this->i18n->t('user.username'); ?>:</div>
+            <div class="form_value"><input type="text" name="username" value="" /></div>
+            <div class="clear"></div>
+            <div class="form_label"><?php echo $this->i18n->t('user.password'); ?>:</div>
+            <div class="form_value"><input class="form_password" type="password" name="password" value="" /></div>
+            <div class="clear"></div>
+            <div class="form_label">&nbsp;</div>
+            <div class="form_value">
+            		<div class="remember_me">
+            			<input class="checkbox" type="checkbox" name="remember_me" value="1" />
+            			<span class="form_label"><?php echo $this->i18n->t('user.remember_me'); ?></span>
+            			<button type="submit" class="btn"><?php echo $this->i18n->t('user.login'); ?></button>
+            			<div class="clear"></div>
+            		</div>
+            </div>
+            <div class="clear"></div>
+        </div>
+            <input type="hidden" name="redirect" value="<?php echo $this->url(array(),'admin',true,false); ?>" />
+        </form>
+    </div>
+    <?php if (trim($this->placeholder('messages')) != ''): ?>
+    <div id="flashMsgs">
+        <?php echo $this->placeholder('messages'); ?>
+    </div>
+    <?php endif; ?>
+</div>

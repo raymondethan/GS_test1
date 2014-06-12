@@ -1,0 +1,199 @@
+		<div id="fb-root"></div>
+		<script>
+		
+		function getQueryParams(qs) {
+				qs = qs.split("+").join(" ");
+
+				var params = {}, tokens,
+					re = /[?&]?([^=]+)=([^&]*)/g;
+
+				while (tokens = re.exec(qs)) {
+					params[decodeURIComponent(tokens[1])]
+						= decodeURIComponent(tokens[2]);
+				}
+
+				return params;
+		}
+		      	
+			window.fbAsyncInit = function() {
+		    	FB.init({
+		    		appId      : '<?php echo $this->i18n->t('application.facebook_id'); ?>',
+		    		status     : true, 
+		    		cookie     : true,
+		    		xfbml      : true,
+		    		oauth 	   : true
+		    	});
+
+		    	FB.getLoginStatus(function(response){
+		    		if (response.status === 'connected'){
+		    			$.ajax({
+							url: '<?php echo $this->url(array('action' => 'get-facebook-user','controller' => 'ajax'),'action',true,false); ?>',
+							success: function(data){
+								data = $.parseJSON(data);
+								
+								if (typeof data['error'] == 'undefined') {
+									images_loading[data['fb_user_id']] = new Image();
+									images_loading[data['fb_user_id']].src = 'https://graph.facebook.com/'+data['fb_user_id']+'/picture';
+									
+									$("#toolbar .tabs .facebook").html('<img width="39" src="'+images_loading[data['fb_user_id']].src+'" alt="" />');
+									$("#toolbar-facebook .facebook-signedin .user_avatar").attr('src',images_loading[data['fb_user_id']].src);
+									$("#toolbar-facebook .facebook-signedin .user_full_name").html(data['first_name']+' '+data['last_name']);
+									$("#toolbar-facebook .facebook-signedin .user_member_since").html(data['member_since']);
+									$("#toolbar-facebook .facebook-signedin .user_shared_number_of_stories").html(data['shared_stories_count']);
+                                     //TMB: Need to display viewed stories and dynamically set the id of the user_views element to that of the user id
+									 
+									 if(typeof data['viewed_stories_count']  != 'undefined'){
+										var num_viewed = data['viewed_stories_count'];
+									 }
+									 else{
+										var num_viewed = 0;
+									 }
+									 
+									if(typeof data['shared_stories_count']  != 'undefined'){
+										var num_recommends = data['shared_stories_count'];
+									 }
+									 else{
+										var num_recommends  = 0;
+									 }
+									 
+									 var total_viewed = parseInt(num_viewed) + parseInt(num_recommends);
+									 
+                                    $(".current_user_views").html("viewed " + total_viewed  + " stories");
+                                    $(".current_user_views").attr("id", "user_views_"+data['id']);
+									
+									$(".current_user_recommends").html("Recommends " + data['shared_stories_count'] + " stories");
+                                    $(".current_user_recommends").attr("id", "user_recommends_"+data['id']);
+																		
+                                    //END TMB
+									$("#toolbar-facebook .facebook-signedout").hide();
+									$("#toolbar-facebook .facebook-signedin").show();
+									GlobalStories.Map.Filter.show("toolbar-facebook");
+									
+									//if (data['update_needed']) {
+						    			$.ajax({
+											url: '<?php echo $this->url(array('action' => 'update-facebook-user','controller' => 'ajax'),'action',true,false); ?>',
+											success: function(data) {
+											
+											}
+						    			});
+									//}
+									
+									var user_messages_click_handler = function(event){
+										$(".back-to-map").attr('href',window.location.pathname);
+										event.preventDefault();
+										History.pushState(null, null, $(this).attr('href'));
+										return false;
+									};
+									
+									var update_community_feed = function(){
+										$.ajax({
+											url: '<?php echo $this->url(array('action' => 'generate-community-feed','controller' => 'ajax'),'action',true,false); ?>',
+											type: 'POST',
+											success: function(data){
+												$("#filter-community .wrapper").html(data);
+                                                                                                //.css('height', ($(window).height() - 460) + 'px');
+												$("#filter-community .wrapper a").bind('click',user_messages_click_handler);
+												GlobalStories.Map.Facebook.resizeLayout();
+												//$("#filter-community .wrapper")								
+												GlobalStories.Shared.customScrollbar('#filter-community .wrapper');
+											}
+										});
+									};
+									update_community_feed();
+									setInterval(update_community_feed,30000);
+									
+									// TDM
+									// Sets friends maps view in left hand col
+									// calls function generateFriendsMapAction in AjaxController
+									var generate_friends_map= function(){
+										
+										var data = window.location.pathname;
+										data = data.replace("/stories/", "");
+										//alert('<?php echo $this->url(array('action' => 'generate-friends-map','controller' => 'ajax'),'action',true,false); ?>');
+										$.ajax({
+											url: '<?php echo $this->url(array('action' => 'generate-friends-map','controller' => 'ajax'),'action',true,false); ?>',
+											type: 'POST',
+											data: data, 
+											success: function(data){
+												$("#filter-friends .wrapper").html(data);
+                                                //.css('height', ($(window).height() - 460) + 'px');
+                                                GlobalStories.Map.Facebook.resizeLayout();
+                                                GlobalStories.Shared.customScrollbar('#filter-friends .wrapper');
+											}
+										});
+									};
+						
+									generate_friends_map();
+                                                                        // TMB - refesh every 30 seconds.
+                                                                        // Decided against this as the refreshing of the list will remove the currently selected user
+                                                                        // if this is required, there will have to be an event that checks what user WAS selected and re-highlight after the list is rendered.
+                                                                        //setInterval(generate_friends_map,30000);
+                                                                        // end TMB
+                                                                        
+									// end TDM
+									
+									
+								}
+							}
+			    		});
+			    	}
+		    		else {
+		    			GlobalStories.Map.Filter.show("toolbar-facebook");
+			    	}
+			    });
+			};
+
+			(function(d){
+				var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			    if (d.getElementById(id)) {return;}
+			    js = d.createElement('script'); js.id = id; js.async = true;
+			    js.src = "//connect.facebook.net/en_US/all.js";
+			    ref.parentNode.insertBefore(js, ref);
+			}(document));
+
+	    	$(document).ready(function(){
+				var facebook_login_click_handler = function(){
+					$("#facebook-login").unbind('click');
+					FB.login(function(response) {
+						$("#facebook-login").bind('click',facebook_login_click_handler);
+						window.location.reload();
+			    		return false;
+		        	},{scope:'publish_stream,user_about_me,user_birthday,user_education_history,user_hometown,user_religion_politics,user_relationships,user_work_history,user_interests,user_likes,user_videos'});
+				};
+
+				$("#facebook-login").bind('click',facebook_login_click_handler);
+
+				var facebook_logout_click_handler = function(){
+					$("#facebook-logout").unbind('click');
+					FB.logout(function(response) {
+						$("#facebook-logout").bind('click',facebook_logout_click_handler);
+						window.location.reload();
+			    		return false;
+					});
+				};
+
+				$("#facebook-logout").bind('click',facebook_logout_click_handler);
+				
+				var facebook_map_promote_click_handler = function(){
+					$(".facebook-signedin .promote a").unbind('click');
+					var fb_ui_data = {'method': 'feed',
+									  'name': 'My Global Stories Map',
+									  'link': window.location.href,
+									  'picture': 'http://<?php echo $_SERVER['HTTP_HOST']; ?>/images/logo.jpg',
+									  'caption': '<?php echo $_SERVER['HTTP_HOST']; ?>',
+									  'description': 'Tell your friends what you feel passionate about by posting your own Global Stories map. See what is being done to change the world.'
+									 };
+	
+					FB.ui(fb_ui_data,function(response){
+						$(".facebook-signedin .promote a").bind('click',facebook_map_promote_click_handler);
+						
+						if (response && response.post_id){
+	
+						}
+					});
+				};
+				$(".facebook-signedin .promote a").bind('click',facebook_map_promote_click_handler);
+				
+			});
+					  
+		</script>

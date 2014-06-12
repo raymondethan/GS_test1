@@ -1,0 +1,41 @@
+
+/* 2. COMMON
+--------------------------------------------------------------------------------
+==============================================================================*/
+
+
+/* Clearfix */
+.clearfix,
+#content,
+#header,
+#story-navigation,
+#footer ul,
+#filter-tags-producers .tabs,
+#filter-corp ul,
+#filter-format ul,
+#filter-duration ul,
+#filter-adult,
+#filter-dates,
+#story-info,
+.section,
+#filter-tags-producers,
+#filter-corp,
+#filter-properties,
+#filter-adult,
+.story-media .ad,
+.story-share,
+.story-details article,
+.story-details .informations,
+#user-info,
+#stats-chooser .custom-select .custom-select-wrapper,
+#stats-info,
+.story-twitter .twtr-widget .twtr-bd,
+.overlay-text .content,
+.section-b,
+.story-twitter,
+.story-details,
+#filter-friends .wrapper li,
+#filter-community .wrapper li
+{
+	zoom: 1;
+}

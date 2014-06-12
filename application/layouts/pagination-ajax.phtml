@@ -1,0 +1,49 @@
+<?php if ($this->pageCount > 1): ?>
+<div class="pagination">
+    <?php if (!is_null($this->previous)): ?>
+    <a class="page_<?php echo $this->previous; ?>"><?php echo $this->i18n->t('pagination.prev'); ?></a>
+    <?php endif; ?>
+    <?php foreach ($this->pagesInRange as $page): ?>
+    <a class="page_<?php echo $page; ?><?php echo ($this->current == $page) ? ' current' : ''; ?>"><?php echo $page; ?></a>
+    <?php endforeach; ?>
+    <?php if (!is_null($this->next)): ?>
+    <a class="page_<?php echo $this->next; ?>"><?php echo $this->i18n->t('pagination.next'); ?></a>
+    <?php endif; ?>
+    <div class="clear"></div>
+</div>
+<?php endif; ?>
+<div class="pagination_items_per_page">
+	<div class="form_label"><?php echo $this->i18n->t('pagination.items_per_page'); ?></div>
+	<div class="form_value">
+		<?php $pagination_items_per_page = array(10,25,50,100); ?>
+		<select name="pagination_items_per_page">
+			<?php foreach ($pagination_items_per_page as $num): ?>
+			<option value="<?php echo $num; ?>"<?php echo (Zend_Auth::getInstance()->getIdentity()->pagination_items_per_page == $num) ? ' selected="selected"' : ''; ?>><?php echo $num; ?></option>
+			<?php endforeach; ?>
+		</select>
+	</div>
+</div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$(".pagination a").bind('click',function(){
+			$(this).removeClass('current');
+			var page = $(this).attr('class').replace('page_','');
+			params['page'] = page;
+			<?php echo $this->callback; ?>();
+		});
+
+		$("select[name=pagination_items_per_page]").bind('change',function(){
+			$.ajax({
+				url: '<?php echo $this->url(array('action' => 'change-pagination-items-per-page'),'admin',true,false); ?>',
+				data: {to: $(this).val()},
+				success: function(data){
+					window.location.reload();
+				}
+			});
+		});
+		
+	});
+</script>
